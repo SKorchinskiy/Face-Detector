@@ -1,0 +1,19 @@
+{
+  "name": "face-detector",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install-backend": "cd backend && npm install",
+    "install-frontend": "cd frontend && npm install",
+    "install": "npm run install-backend && npm run install-frontend",
+    "start-backend": "npm start --prefix backend",
+    "start-frontend": "npm run dev --prefix frontend",
+    "dev": "npm run start-backend & npm run start-frontend"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "backend": "file:backend"
+  }
+}
