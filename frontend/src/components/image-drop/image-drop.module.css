@@ -1,0 +1,50 @@
+.nav-buttons-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.image-drop-container {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+  cursor: pointer;
+  border: 1px dashed black;
+  width: 100%;
+  height: 100%;
+}
+
+.loading-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  zindex: 10;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.image-drop-element:hover {
+  animation: shaking 4s infinite;
+}
+
+@keyframes shaking {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
