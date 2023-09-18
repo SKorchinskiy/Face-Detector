@@ -1,0 +1,24 @@
+.btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  height: 100px;
+  width: 300px;
+  background: #000;
+  color: #fff;
+  user-select: none;
+  cursor: pointer;
+
+  transition-duration: 0.1s;
+  font-size: 35px;
+  text-transform: uppercase;
+}
+
+.btn-container:hover {
+  background: #242424;
+}
+
+.btn-container:active {
+  background: #363636;
+}
