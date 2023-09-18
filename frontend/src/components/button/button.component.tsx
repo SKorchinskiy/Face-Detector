@@ -10,17 +10,19 @@ const inter = Inter({
 type ButtonProps = {
   clickHandler?: MouseEventHandler<HTMLButtonElement>;
   btnType?: "submit" | "button";
+  className?: string;
 } & PropsWithChildren;
 
 export default function Button({
   children,
   btnType = "button",
+  className = "",
   clickHandler,
 }: ButtonProps) {
   return (
     <button
       type={btnType}
-      className={`${style["btn-container"]} ${inter.className}`}
+      className={`${style[className]} ${inter.className}`}
       onClick={clickHandler}
     >
       {children}
