@@ -1,0 +1,26 @@
+.headline {
+  text-align: center;
+
+  background: linear-gradient(
+    to right,
+    #000 40%,
+    #833ab4 40%,
+    #000 60%,
+    #fcb045 80%
+  );
+  background-size: 200% auto;
+
+  color: #000;
+  background-clip: text;
+  text-fill-color: transparent;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: shine 10s linear infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
