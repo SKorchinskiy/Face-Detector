@@ -45,8 +45,12 @@ export default function Home() {
             justifyContent: "space-between",
           }}
         >
-          <NavButton path="/">Try Now</NavButton>
-          <NavButton path="/auth">Sign Up</NavButton>
+          <NavButton className="btn-container" path="/detect">
+            Try Now
+          </NavButton>
+          <NavButton className="btn-container" path="/auth">
+            Sign Up
+          </NavButton>
         </div>
         <div className={styles.container}>
           <h1

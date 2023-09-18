@@ -15,6 +15,23 @@
   text-transform: uppercase;
 }
 
+.back-and-forth {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  height: 50px;
+  width: 150px;
+  background: rgb(50, 113, 168);
+  color: #fff;
+  user-select: none;
+  cursor: pointer;
+
+  transition-duration: 0.1s;
+  font-size: 18px;
+  text-transform: uppercase;
+}
+
 .btn-container:hover {
   background: #242424;
 }

@@ -4,12 +4,17 @@ import { PropsWithChildren } from "react";
 
 type NavButtonProps = {
   path: string;
+  className?: string;
 } & PropsWithChildren;
 
-export default function NavButton({ path, children }: NavButtonProps) {
+export default function NavButton({
+  path,
+  children,
+  className = "",
+}: NavButtonProps) {
   return (
     <Link style={{ textDecoration: "none" }} href={path}>
-      <Button>{children}</Button>
+      <Button className={className}>{children}</Button>
     </Link>
   );
 }

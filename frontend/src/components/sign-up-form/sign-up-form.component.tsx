@@ -4,6 +4,7 @@ import styles from "./sign-up-form.module.css";
 
 import Button from "../button/button.component";
 import { useState } from "react";
+import Field from "../field/field.component";
 
 const initialState = {
   name: "",
@@ -32,50 +33,36 @@ export default function SignUpForm() {
   };
 
   return (
-    <form
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignContent: "center",
-        justifyContent: "space-between",
-        height: "300px",
-        width: "300px",
-      }}
-    >
-      <div className="form-field">
-        <label htmlFor="name" />
-        <input
-          id="name"
-          type="text"
-          placeholder="enter name"
-          className={styles["form-field"]}
-          value={formFields.name}
-          onChange={handleFormFieldChange}
-        />
-      </div>
-      <div className="form-field">
-        <label htmlFor="email" />
-        <input
-          id="email"
-          type="email"
-          placeholder="enter email"
-          className={styles["form-field"]}
-          value={formFields.email}
-          onChange={handleFormFieldChange}
-        />
-      </div>
-      <div className="form-field">
-        <label htmlFor="password" />
-        <input
-          id="password"
-          type="password"
-          placeholder="enter password"
-          className={styles["form-field"]}
-          value={formFields.password}
-          onChange={handleFormFieldChange}
-        />
-      </div>
-      <Button btnType="submit" clickHandler={handleSignUp}>
+    <form className={styles["form-container"]}>
+      <Field
+        id="name"
+        type="text"
+        placeholder="enter name"
+        value={formFields.name}
+        className="form-field"
+        onFieldChange={handleFormFieldChange}
+      />
+      <Field
+        id="email"
+        type="email"
+        placeholder="enter email"
+        value={formFields.email}
+        className="form-field"
+        onFieldChange={handleFormFieldChange}
+      />
+      <Field
+        id="password"
+        type="password"
+        placeholder="enter password"
+        value={formFields.password}
+        className="form-field"
+        onFieldChange={handleFormFieldChange}
+      />
+      <Button
+        className="btn-container"
+        btnType="submit"
+        clickHandler={handleSignUp}
+      >
         Sign Up
       </Button>
     </form>
