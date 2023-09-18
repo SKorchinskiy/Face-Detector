@@ -1,95 +1,65 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+import styles from "./page.module.css";
+import { Fragment } from "react";
+import Image from "next/image";
+import NavButton from "@/components/nav-button/nav-button.component";
 
 export default function Home() {
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
+    <Fragment>
+      <div
+        style={{
+          height: "300px",
+        }}
+      >
         <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+          src="/face.png"
+          width="350"
+          height="350"
+          style={{
+            position: "absolute",
+            zIndex: 10,
+            transform: "rotate(-25deg)",
+            left: "60px",
+          }}
+          alt="face"
+        />
+        <Image
+          src="/face.png"
+          width="350"
+          height="350"
+          style={{
+            position: "absolute",
+            zIndex: 10,
+            transform: "rotate(25deg)",
+            right: "60px",
+          }}
+          alt="face"
         />
       </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
+      <div className={styles.container}>
+        <h1 className={styles.headline}>Detect Faces Using Images</h1>
+        <div
+          style={{
+            display: "flex",
+            width: "750px",
+            justifyContent: "space-between",
+          }}
         >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+          <NavButton path="/">Try Now</NavButton>
+          <NavButton path="/auth">Sign Up</NavButton>
+        </div>
+        <div className={styles.container}>
+          <h1
+            style={{
+              position: "absolute",
+              fontSize: "20px",
+              bottom: "20px",
+            }}
+          >
+            Over 1+ million users use Face Detector
+          </h1>
+        </div>
       </div>
-    </main>
-  )
+    </Fragment>
+  );
 }
