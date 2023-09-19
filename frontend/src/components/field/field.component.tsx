@@ -1,5 +1,10 @@
 import styles from "./field.module.css";
-import { ChangeEventHandler, Fragment } from "react";
+import {
+  ChangeEventHandler,
+  Fragment,
+  MutableRefObject,
+  forwardRef,
+} from "react";
 
 type FieldProps = {
   id: string;
@@ -10,14 +15,17 @@ type FieldProps = {
   onFieldChange: ChangeEventHandler<HTMLInputElement>;
 };
 
-export default function Field({
-  id,
-  type = "text",
-  placeholder = "",
-  value = "",
-  className = "",
-  onFieldChange = () => {},
-}: FieldProps) {
+function Field(
+  {
+    id,
+    type = "text",
+    placeholder = "",
+    value = "",
+    className = "",
+    onFieldChange = () => {},
+  }: FieldProps,
+  ref: any
+) {
   return (
     <div
       style={{
@@ -34,7 +42,10 @@ export default function Field({
         value={value}
         className={styles[className]}
         onChange={onFieldChange}
+        ref={ref}
       />
     </div>
   );
 }
+
+export default forwardRef<HTMLInputElement, FieldProps>(Field);

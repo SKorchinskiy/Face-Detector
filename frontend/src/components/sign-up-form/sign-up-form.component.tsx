@@ -25,7 +25,6 @@ export default function SignUpForm() {
 
   const handleSignUp = (event: any) => {
     event.preventDefault();
-    console.log("here", event);
     fetch("http://localhost:8000/api/v1/sign-up", {
       method: "post",
       body: JSON.stringify(formFields),
