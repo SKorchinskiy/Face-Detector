@@ -21,18 +21,19 @@ const dropOptions = {
   multiple: false,
 };
 
-export default function ImageDrop() {
-  const [image, setImage] = useState("");
+type ImageDropProps = {
+  processUpload: (file: any) => Promise<string>;
+};
+
+export default function ImageDrop({ processUpload }: ImageDropProps) {
   const [dragOver, setDragOver] = useState(false);
   const router = useRouter();
 
-  const onDropHandler = (event: DragEvent<HTMLDivElement>) => {
+  const onDropHandler = async (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    const file = URL.createObjectURL(event.dataTransfer.files[0]);
-    setImage(file);
     setDragOver(false);
-    console.log("here");
-    router.push("detect/image/123");
+    const imageId = await processUpload(event.dataTransfer.files[0]);
+    router.push(`detect/image/${imageId}`);
   };
 
   const onDragOverEndHandler = (event: DragEvent<HTMLDivElement>) => {
@@ -41,19 +42,24 @@ export default function ImageDrop() {
   };
 
   const onUploadHandler = async () => {
-    const [fileHandle] = await (window as any).showOpenFilePicker(dropOptions);
-    const file = await fileHandle.getFile();
-    for (let val in file) {
-      console.log(val, file[val]);
+    setDragOver(true);
+    try {
+      const [fileHandle] = await (window as any).showOpenFilePicker(
+        dropOptions
+      );
+      const file = await fileHandle.getFile();
+      const imageId = await processUpload(file);
+      router.push(`detect/image/${imageId}`);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setDragOver(false);
     }
-    console.log("here", URL.createObjectURL(file));
-    setImage(URL.createObjectURL(file));
-    router.push("detect/image/123");
   };
 
   return (
     <Fragment>
-      {image ? <div className={styles["loading-effect"]}></div> : <></>}
+      {/* {image ? <div className={styles["loading-effect"]}></div> : <></>} */}
       <div
         className={styles["image-drop-container"]}
         style={{
@@ -94,18 +100,6 @@ export default function ImageDrop() {
           <p>Drag and Drop</p>
         </div>
       </div>
-      {image && (
-        <Image
-          src={image}
-          alt="image"
-          style={{
-            position: "absolute",
-            bottom: "50px",
-          }}
-          width="100"
-          height="100"
-        />
-      )}
       <div className={styles["nav-buttons-container"]}>
         <NavButton className="back-and-forth" path="/">
           Back
