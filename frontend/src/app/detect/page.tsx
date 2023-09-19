@@ -2,12 +2,63 @@
 
 import styles from "./page.module.css";
 
-import Button from "@/components/button/button.component";
 import Field from "@/components/field/field.component";
 import ImageDrop from "@/components/image-drop/image-drop.component";
-import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 export default function Detect() {
+  const [imageUrl, setImageUrl] = useState("");
+  const router = useRouter();
+  const urlFieldRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    function enterKeyListener(event: KeyboardEvent) {
+      if (event.key === "Enter") {
+        if (!imageUrl) {
+          urlFieldRef.current?.focus();
+        } else {
+          processUrlDetection(imageUrl).then((id) => {
+            router.push(`/detect/image/${id}`);
+          });
+        }
+      }
+    }
+    window.addEventListener("keypress", enterKeyListener);
+    return () => window.removeEventListener("keypress", enterKeyListener);
+  }, [imageUrl, router]);
+
+  const onUrlFieldChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setImageUrl(value);
+  };
+
+  const processUrlDetection = async (imageUrl: string) => {
+    const res = await fetch("http://localhost:8000/detect", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ imageUrl }),
+    });
+    const { id } = await res.json();
+    return id;
+  };
+
+  const processFaceDetection = async (file: any) => {
+    const data = await file.arrayBuffer();
+    const image = Buffer.from(data);
+    const res = await fetch("http://localhost:8000/detect", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ image }),
+    });
+    const { id } = await res.json();
+    return id;
+  };
+
   return (
     <div
       style={{
@@ -28,11 +79,12 @@ export default function Detect() {
       >
         <Field
           id="image-detector"
-          type="text"
+          type="url"
           placeholder="enter image url"
-          value=""
+          value={imageUrl}
           className="image-detector"
-          onFieldChange={() => {}}
+          onFieldChange={onUrlFieldChange}
+          ref={urlFieldRef}
         />
         <div
           style={{
@@ -42,7 +94,7 @@ export default function Detect() {
             width: "80%",
           }}
         >
-          <ImageDrop />
+          <ImageDrop processUpload={processFaceDetection} />
         </div>
       </div>
     </div>
