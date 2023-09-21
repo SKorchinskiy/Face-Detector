@@ -1,17 +1,18 @@
 const mysql = require("./mysql.config");
 
 async function getImageFromDB(id) {
-  const [{ url, bounding_box }] = await mysql("images")
-    .select("url", "bounding_box")
-    .where({ id });
-
-  return { id, imageUrl: url, bounding_box: JSON.parse(bounding_box) };
+  const [data] = await mysql("images").select("*").where({ id });
+  return {
+    ...data,
+    detected_faces: JSON.parse(data.detected_faces),
+  };
 }
 
-async function addImageToDB(url, bounding_box) {
+async function addImageToDB(imageMetaData) {
   const [id] = await mysql("images").insert({
-    url,
-    bounding_box: JSON.stringify(bounding_box),
+    ...imageMetaData,
+    detected_faces: JSON.stringify(imageMetaData.detected_faces),
+    face_count: imageMetaData.detected_faces.length,
   });
   return id;
 }
