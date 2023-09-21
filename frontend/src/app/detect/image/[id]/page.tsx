@@ -1,4 +1,30 @@
+import FaceBoxList from "@/components/face-box-list/face-box-list.component";
+import FaceCanvasList from "@/components/face-canvas-list/face-canvas-list.component";
 import Image from "next/image";
+
+export type BoundingBox = {
+  top_row: number;
+  right_col: number;
+  bottom_row: number;
+  left_col: number;
+};
+
+export type DetectedFace = {
+  bounding_box: BoundingBox;
+  probability: number;
+};
+
+export type ImageMetaData = {
+  id: number;
+  image_url: string;
+  detected_faces: Array<DetectedFace>;
+  face_count: number;
+  bytes: number;
+  expiration: number;
+  width: number;
+  height: number;
+  created_at: string;
+};
 
 export default async function ImageRecognition({
   params,
@@ -10,56 +36,82 @@ export default async function ImageRecognition({
   const response = await fetch(`http://localhost:8000/detect/${params.id}`, {
     method: "GET",
   });
-  const { imageUrl, bounding_box } = await response.json();
-  const imgWidth = 500;
-  const imgHeight = 500;
-  const imgMargin = 500;
-  const width =
-    (bounding_box["right_col"] - bounding_box["left_col"]) * imgWidth;
-  const height =
-    (bounding_box["bottom_row"] - bounding_box["top_row"]) * imgHeight;
-  const marginLeft = bounding_box["left_col"] * imgMargin;
-  const marginTop = bounding_box["top_row"] * imgMargin;
-  /*
-    500 - 100%
-    (top|left|bottom|right)_row - row * 100%
-  */
+  const imageMetaData: ImageMetaData = await response.json();
+  const imageShortenerValue = imageMetaData.width / (2 * 400);
+
   return (
-    <div
-      style={{
-        display: "flex",
-        width: "100%",
-        height: "100%",
-      }}
-    >
+    <>
       <div
         style={{
-          width: "500px",
-          height: "500px",
+          display: "flex",
+          width: "100%",
+          margin: 50,
         }}
       >
-        <Image
-          style={{
-            position: "absolute",
-            zIndex: 10,
-          }}
-          width={500}
-          height={500}
-          alt="face"
-          src={imageUrl}
-        />
         <div
           style={{
-            position: "absolute",
-            border: "5px solid black",
-            width: `${width}px`,
-            height: `${height}px`,
-            zIndex: 100,
-            marginLeft: `${marginLeft}px`,
-            marginTop: `${marginTop}px`,
+            display: "flex",
+            position: "relative",
           }}
-        ></div>
+        >
+          <Image
+            id="face-to-recognize"
+            style={{
+              zIndex: 10,
+              position: "relative",
+            }}
+            width={imageMetaData.width / (imageShortenerValue * 2)}
+            height={imageMetaData.height / (imageShortenerValue * 2)}
+            alt="face"
+            src={imageMetaData.image_url}
+          />
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+            }}
+          >
+            <FaceBoxList
+              imageMetaData={imageMetaData}
+              imageShortenerValue={imageShortenerValue * 2}
+            />
+          </div>
+        </div>
+        <div
+          style={{
+            marginLeft: 50,
+          }}
+        >
+          <FaceCanvasList
+            imageMetaData={imageMetaData}
+            imageShortenerValue={imageShortenerValue}
+          />
+        </div>
       </div>
-    </div>
+      <div
+        style={{
+          width: "80%",
+          margin: 50,
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <div>
+          <p>creation: {imageMetaData.created_at}</p>
+          <p>
+            size(mb):{" "}
+            {Math.round((imageMetaData.bytes / 1024 ** 2) * 10000) / 10000}
+          </p>
+          <p>expires in: {imageMetaData.expiration || "-"}</p>
+        </div>
+        <div>
+          <p>user: guest</p>
+          <p>origin url: {imageMetaData.image_url}</p>
+        </div>
+      </div>
+      <div style={{ margin: 50 }}>
+        <h2>Recent detections</h2>
+      </div>
+    </>
   );
 }
