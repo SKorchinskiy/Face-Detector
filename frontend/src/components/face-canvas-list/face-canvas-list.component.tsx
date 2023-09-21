@@ -24,32 +24,33 @@ export default function FaceCanvasList({
       >
         {imageMetaData.detected_faces.map(
           ({ bounding_box, probability }: DetectedFace, index) => {
+            const ratio = imageMetaData.width < 400 ? 1 : imageShortenerValue;
             const width =
               ((bounding_box["right_col"] - bounding_box["left_col"]) *
                 imageMetaData.width) /
-              imageShortenerValue;
+              ratio;
             const height =
               ((bounding_box["bottom_row"] - bounding_box["top_row"]) *
                 imageMetaData.height) /
-              imageShortenerValue;
+              ratio;
             const marginLeft =
-              (bounding_box["left_col"] * imageMetaData.width) /
-              imageShortenerValue;
+              (bounding_box["left_col"] * imageMetaData.width) / ratio;
             const marginTop =
-              (bounding_box["top_row"] * imageMetaData.height) /
-              imageShortenerValue;
+              (bounding_box["top_row"] * imageMetaData.height) / ratio;
 
             return (
-              <FaceCanvas
-                key={index}
-                id={index}
-                image_src={imageMetaData.image_url}
-                image_width={width}
-                image_height={height}
-                margin_left={marginLeft}
-                margin_top={marginTop}
-                face_count={imageMetaData.face_count}
-              />
+              <>
+                <FaceCanvas
+                  key={index}
+                  id={index}
+                  box_width={width}
+                  box_height={height}
+                  box_left_margin={marginLeft}
+                  box_top_margin={marginTop}
+                  face_count={imageMetaData.face_count}
+                />
+                <p>probability: {Math.round(probability * 1000) / 1000}</p>
+              </>
             );
           }
         )}
