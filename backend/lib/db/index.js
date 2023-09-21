@@ -20,7 +20,7 @@ async function addImageToDB(imageMetaData) {
 async function getRecentDetections(count) {
   const detections = await mysql("images")
     .select("*")
-    .orderBy("created_at")
+    .orderBy("created_at", "desc")
     .limit(count);
   return detections.map((detection) => ({
     ...detection,
