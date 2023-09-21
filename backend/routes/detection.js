@@ -1,27 +1,23 @@
 const express = require("express");
 
-const { getImageBoundingBoxes } = require("../lib/ai");
-const { createImageUrl } = require("../lib/image.helper");
+const { getFaceDetectionData } = require("../lib/ai");
+const { getImageDataFromRequest } = require("../lib/image.helper");
 const { getImageFromDB, addImageToDB } = require("../lib/db");
 
 const detectionRouter = express.Router();
 
 detectionRouter.get("/:id", async (req, res) => {
   const { id } = req.params;
-  const { imageUrl, bounding_box } = await getImageFromDB(id);
-  return res.json({ id, imageUrl, bounding_box });
+  const data = await getImageFromDB(id);
+  return res.status(200).json(data);
 });
 
 detectionRouter.post("/", async (req, res) => {
-  const base64Image = Buffer.from(req.body.image.data, "binary").toString(
-    "base64"
-  );
-  const imageUrl = await createImageUrl(base64Image);
-  const bounding_box = await getImageBoundingBoxes(imageUrl);
+  const imageData = await getImageDataFromRequest(req);
+  const faceDetection = await getFaceDetectionData(imageData.image_url);
+  const id = await addImageToDB({ ...imageData, ...faceDetection });
 
-  const id = await addImageToDB(imageUrl, bounding_box);
-
-  return res.status(201).json({ id, imageUrl });
+  return res.status(201).json({ id });
 });
 
 module.exports = detectionRouter;
