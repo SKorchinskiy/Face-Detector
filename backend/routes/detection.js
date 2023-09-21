@@ -2,9 +2,19 @@ const express = require("express");
 
 const { getFaceDetectionData } = require("../lib/ai");
 const { getImageDataFromRequest } = require("../lib/image.helper");
-const { getImageFromDB, addImageToDB } = require("../lib/db");
+const {
+  getImageFromDB,
+  addImageToDB,
+  getRecentDetections,
+} = require("../lib/db");
 
 const detectionRouter = express.Router();
+
+detectionRouter.get("/recent/:count", async (req, res) => {
+  const count = +req.count;
+  const recentDetections = await getRecentDetections(count);
+  return res.status(200).json({ data: recentDetections });
+});
 
 detectionRouter.get("/:id", async (req, res) => {
   const { id } = req.params;

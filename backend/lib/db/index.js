@@ -17,7 +17,19 @@ async function addImageToDB(imageMetaData) {
   return id;
 }
 
+async function getRecentDetections(count) {
+  const detections = await mysql("images")
+    .select("*")
+    .orderBy("created_at")
+    .limit(count);
+  return detections.map((detection) => ({
+    ...detection,
+    detected_faces: JSON.parse(detection.detected_faces),
+  }));
+}
+
 module.exports = {
   getImageFromDB,
   addImageToDB,
+  getRecentDetections,
 };
