@@ -6,7 +6,14 @@ const stub = ClarifaiStub.grpc();
 const metadata = new grpc.Metadata();
 metadata.set("authorization", "Key " + clarify.PAT);
 
-async function getImageBoundingBoxes(image) {
+function formatDetectionData(detection_data) {
+  return detection_data.outputs[0].data.regions.map((face_region) => ({
+    bounding_box: face_region.region_info.bounding_box,
+    probability: face_region.value,
+  }));
+}
+
+async function getFaceDetectionData(image) {
   try {
     const response = await new Promise((resolve, reject) =>
       stub.PostModelOutputs(
@@ -38,7 +45,9 @@ async function getImageBoundingBoxes(image) {
         }
       )
     );
-    return response.outputs[0].data.regions[0].region_info.bounding_box;
+    return {
+      detected_faces: formatDetectionData(response),
+    };
   } catch (error) {
     console.log({ error });
     return error;
@@ -46,5 +55,5 @@ async function getImageBoundingBoxes(image) {
 }
 
 module.exports = {
-  getImageBoundingBoxes,
+  getFaceDetectionData,
 };
