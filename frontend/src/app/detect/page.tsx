@@ -33,13 +33,13 @@ export default function Detect() {
     setImageUrl(value);
   };
 
-  const processUrlDetection = async (imageUrl: string) => {
+  const processUrlDetection = async (url: string) => {
     const res = await fetch("http://localhost:8000/detect", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ imageUrl }),
+      body: JSON.stringify({ url }),
     });
     const { id } = await res.json();
     return id;
@@ -53,7 +53,7 @@ export default function Detect() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ image }),
+      body: JSON.stringify({ base64: image }),
     });
     const { id } = await res.json();
     return id;

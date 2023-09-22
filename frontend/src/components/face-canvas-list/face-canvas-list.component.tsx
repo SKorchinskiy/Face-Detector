@@ -39,7 +39,6 @@ export default function FaceCanvasList({
               bounding_box["left_col"] * imageMetaData.width * ratio;
             const marginTop =
               bounding_box["top_row"] * imageMetaData.height * ratio;
-            console.log(width, height);
             return (
               <>
                 <FaceCanvas
