@@ -1,5 +1,5 @@
 function setUpImageModel(config) {
-  return async (image_url) => {
+  return async (data) => {
     try {
       const response = await new Promise((resolve, reject) =>
         config.stub.PostModelOutputs(
@@ -12,7 +12,7 @@ function setUpImageModel(config) {
             version_id: config.MODEL_VERSION_ID,
             inputs: [
               {
-                data: { image: { url: image_url, allow_duplicate_url: true } },
+                data: { image: { ...data, allow_duplicate_url: true } },
               },
             ],
           },
@@ -28,7 +28,6 @@ function setUpImageModel(config) {
                   response.status.description
               );
             }
-
             resolve(response);
           }
         )
