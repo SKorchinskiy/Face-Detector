@@ -10,11 +10,11 @@ const generalModelConfig = {
   metadata: clarify.metadata,
 };
 
-async function getGeneralImageData(image_url) {
+async function getGeneralImageData(data) {
   try {
     const generalRecognition = setUpImageModel(generalModelConfig);
-    const data = await generalRecognition(image_url);
-    const tags = data.outputs[0].data.concepts.map((concept) => ({
+    const response = await generalRecognition(data);
+    const tags = response.outputs[0].data.concepts.map((concept) => ({
       tag_name: concept.name,
       probability: concept.value,
     }));
