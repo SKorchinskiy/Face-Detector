@@ -18,7 +18,7 @@ export type DetectedFace = {
 
 export type ImageMetaData = {
   id: number;
-  image_url: string;
+  url: string;
   detected_faces: Array<DetectedFace>;
   face_count: number;
   bytes: number;
@@ -40,10 +40,13 @@ export default async function ImageRecognition({
   });
   const imageMetaData: ImageMetaData = await response.json();
   const imageShortenerValue = 400 / imageMetaData.width;
-
   const recommendations = await (
-    await fetch(`http://localhost:8000/detect/recent/8`, {
-      method: "GET",
+    await fetch(`http://localhost:8000/detect/related/${imageMetaData.id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ limit: 8 }),
     })
   ).json();
   const recentDetections: ImageMetaData[] = recommendations.data;
@@ -53,7 +56,7 @@ export default async function ImageRecognition({
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ image_url: imageMetaData.image_url }),
+      body: JSON.stringify({ url: imageMetaData.url }),
     })
   ).json();
 
@@ -81,7 +84,7 @@ export default async function ImageRecognition({
             width={imageMetaData.width * imageShortenerValue}
             height={imageMetaData.height * imageShortenerValue}
             alt="face"
-            src={imageMetaData.image_url}
+            src={imageMetaData.url}
           />
           <div
             style={{
@@ -134,11 +137,11 @@ export default async function ImageRecognition({
         </div>
         <div>
           <p>user: guest</p>
-          <p>origin url: {imageMetaData.image_url}</p>
+          <p>origin url: {imageMetaData.url}</p>
         </div>
       </div>
       <div style={{ margin: 50 }}>
-        <h2>Recent detections</h2>
+        <h2>Similar detections</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}>
           {recentDetections.map((detection, index) => {
             const ratio = detection.width / detection.height;
@@ -155,7 +158,7 @@ export default async function ImageRecognition({
                     width={200 * ratio}
                     height={200}
                     alt="face"
-                    src={detection.image_url}
+                    src={detection.url}
                   />
                 </div>
               </Link>
