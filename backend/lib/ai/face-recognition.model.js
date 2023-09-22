@@ -17,10 +17,10 @@ function formatDetectionData(detection_data) {
   }));
 }
 
-async function getFaceDetectionData(image_url) {
+async function getFaceDetectionData(data) {
   try {
     const faceRecognition = setUpImageModel(FaceModelConfig);
-    const response = await faceRecognition(image_url);
+    const response = await faceRecognition(data);
     return {
       detected_faces: formatDetectionData(response),
     };
