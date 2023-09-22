@@ -8,7 +8,18 @@ async function getImageFromDB(id) {
   };
 }
 
+async function checkImageExists(x_projection, y_projection) {
+  const [data] = await mysql("images")
+    .select("id")
+    .where({ x_projection, y_projection });
+  return data;
+}
+
 async function addImageToDB(imageMetaData) {
+  const { x_projection, y_projection } = imageMetaData;
+  const response = await checkImageExists(x_projection, y_projection);
+  if (response?.id) return response.id;
+
   const [id] = await mysql("images").insert({
     ...imageMetaData,
     detected_faces: JSON.stringify(imageMetaData.detected_faces),
@@ -28,8 +39,23 @@ async function getRecentDetections(count) {
   }));
 }
 
+async function getRecommendedDetections(limit, imgData) {
+  const closestImageQuery = `SQRT(POWER(${imgData.x_projection}-x_projection, 2) + POWER(${imgData.y_projection}-y_projection, 2))`;
+  const detections = await mysql("images")
+    .select("*")
+    .orderByRaw(closestImageQuery)
+    .whereRaw(`id <> ${imgData.id}`)
+    .limit(limit);
+  return detections.map((detection) => ({
+    ...detection,
+    detected_faces: JSON.parse(detection.detected_faces),
+  }));
+}
+
 module.exports = {
   getImageFromDB,
   addImageToDB,
+  checkImageExists,
   getRecentDetections,
+  getRecommendedDetections,
 };
