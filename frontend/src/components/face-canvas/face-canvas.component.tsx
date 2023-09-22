@@ -8,7 +8,6 @@ type FaceCanvasProps = {
   box_height: number;
   box_left_margin: number;
   box_top_margin: number;
-  face_count: number;
 };
 
 export default function FaceCanvas({
@@ -22,10 +21,12 @@ export default function FaceCanvas({
     const image = document.getElementById(
       "face-to-recognize"
     ) as HTMLImageElement;
+
     const tid = setInterval(() => {
       cropRestrictedArea();
       clearTimeout(tid);
     }, 500);
+
     function cropRestrictedArea() {
       const canvas = document.getElementById(`face-canvas-${id}`);
       canvas?.setAttribute("width", `${box_width}`);
@@ -35,8 +36,8 @@ export default function FaceCanvas({
         image,
         box_left_margin,
         box_top_margin,
-        box_width + 20,
-        box_height + 20,
+        box_width,
+        box_height,
         0,
         0,
         box_width,

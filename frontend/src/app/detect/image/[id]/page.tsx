@@ -39,7 +39,7 @@ export default async function ImageRecognition({
     method: "GET",
   });
   const imageMetaData: ImageMetaData = await response.json();
-  const imageShortenerValue = imageMetaData.width / (2 * 400);
+  const imageShortenerValue = 400 / imageMetaData.width;
 
   const recommendations = await (
     await fetch(`http://localhost:8000/detect/recent/8`, {
@@ -78,8 +78,8 @@ export default async function ImageRecognition({
               zIndex: 10,
               position: "relative",
             }}
-            width={imageMetaData.width / (imageShortenerValue * 2)}
-            height={imageMetaData.height / (imageShortenerValue * 2)}
+            width={imageMetaData.width * imageShortenerValue}
+            height={imageMetaData.height * imageShortenerValue}
             alt="face"
             src={imageMetaData.image_url}
           />
@@ -91,7 +91,7 @@ export default async function ImageRecognition({
           >
             <FaceBoxList
               imageMetaData={imageMetaData}
-              imageShortenerValue={imageShortenerValue * 2}
+              imageShortenerValue={imageShortenerValue}
             />
           </div>
         </div>
