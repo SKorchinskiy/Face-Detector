@@ -13,20 +13,22 @@ export default function FaceBoxList({
   return (
     <>
       {imageMetaData.detected_faces.map(
-        ({ bounding_box, probability }: DetectedFace, index) => {
+        ({ bounding_box }: DetectedFace, index) => {
           const width =
-            ((bounding_box["right_col"] - bounding_box["left_col"]) *
-              imageMetaData.width) /
+            (bounding_box["right_col"] - bounding_box["left_col"]) *
+            imageMetaData.width *
             imageShortenerValue;
           const height =
-            ((bounding_box["bottom_row"] - bounding_box["top_row"]) *
-              imageMetaData.height) /
+            (bounding_box["bottom_row"] - bounding_box["top_row"]) *
+            imageMetaData.height *
             imageShortenerValue;
           const marginLeft =
-            (bounding_box["left_col"] * imageMetaData.width) /
+            bounding_box["left_col"] *
+            imageMetaData.width *
             imageShortenerValue;
           const marginTop =
-            (bounding_box["top_row"] * imageMetaData.height) /
+            bounding_box["top_row"] *
+            imageMetaData.height *
             imageShortenerValue;
           return (
             <FaceBox
