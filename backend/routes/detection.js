@@ -1,19 +1,18 @@
 const express = require("express");
 
-const { getFaceDetectionData } = require("../lib/ai/face-recognition.model");
+const { processImage } = require("../lib/image/image.service");
 const { getGeneralImageData } = require("../lib/ai/general-recognition.model");
-const { getImageDataFromRequest } = require("../lib/image.helper");
 const {
   getImageFromDB,
-  addImageToDB,
   getRecentDetections,
+  getRecommendedDetections,
 } = require("../lib/db");
 
 const detectionRouter = express.Router();
 
 detectionRouter.post("/image/tags", async (req, res) => {
-  const { image_url } = req.body;
-  const tags = await getGeneralImageData(image_url);
+  const data = req.body;
+  const tags = await getGeneralImageData(data);
   return res.status(200).json({ data: tags });
 });
 
@@ -23,6 +22,14 @@ detectionRouter.get("/recent/:count", async (req, res) => {
   return res.status(200).json({ data: recentDetections });
 });
 
+detectionRouter.post("/related/:id", async (req, res) => {
+  const id = +req.params.id;
+  const limit = +req.body.limit;
+  const imgData = await getImageFromDB(id);
+  const related = await getRecommendedDetections(limit, imgData);
+  return res.status(200).json({ data: related });
+});
+
 detectionRouter.get("/:id", async (req, res) => {
   const { id } = req.params;
   const data = await getImageFromDB(id);
@@ -30,9 +37,12 @@ detectionRouter.get("/:id", async (req, res) => {
 });
 
 detectionRouter.post("/", async (req, res) => {
-  const imageData = await getImageDataFromRequest(req);
-  const faceDetection = await getFaceDetectionData(imageData.image_url);
-  const id = await addImageToDB({ ...imageData, ...faceDetection });
+  const data = req.body;
+  if (data.base64) {
+    data.base64 = data.base64.data;
+  }
+
+  const { id } = await processImage(data);
 
   return res.status(201).json({ id });
 });
