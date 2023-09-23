@@ -3,13 +3,9 @@ import FaceCanvas from "../face-canvas/face-canvas.component";
 
 type FaceCanvasListProps = {
   imageMetaData: ImageMetaData;
-  imageShortenerValue: number;
 };
 
-export default function FaceCanvasList({
-  imageMetaData,
-  imageShortenerValue,
-}: FaceCanvasListProps) {
+export default function FaceCanvasList({ imageMetaData }: FaceCanvasListProps) {
   return (
     <>
       <p>Faces detected: {imageMetaData.face_count}</p>
@@ -24,21 +20,14 @@ export default function FaceCanvasList({
       >
         {imageMetaData.detected_faces.map(
           ({ bounding_box, probability }: DetectedFace, index) => {
-            // fix bruteforce ratio
-            const ratio =
-              imageMetaData.width <= 500 ? 1 : 2 * imageShortenerValue;
             const width =
               (bounding_box["right_col"] - bounding_box["left_col"]) *
-              imageMetaData.width *
-              ratio;
+              imageMetaData.width;
             const height =
               (bounding_box["bottom_row"] - bounding_box["top_row"]) *
-              imageMetaData.height *
-              ratio;
-            const marginLeft =
-              bounding_box["left_col"] * imageMetaData.width * ratio;
-            const marginTop =
-              bounding_box["top_row"] * imageMetaData.height * ratio;
+              imageMetaData.height;
+            const marginLeft = bounding_box["left_col"] * imageMetaData.width;
+            const marginTop = bounding_box["top_row"] * imageMetaData.height;
             return (
               <>
                 <FaceCanvas

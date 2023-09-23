@@ -39,3 +39,8 @@
 .btn-container:active {
   background: #363636;
 }
+
+.disabled {
+  background: rgba(97, 97, 97);
+  cursor: default;
+}
