@@ -7,23 +7,28 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-type ButtonProps = {
+export type ButtonProps = {
   clickHandler?: MouseEventHandler<HTMLButtonElement>;
   btnType?: "submit" | "button";
   className?: string;
+  disabled?: boolean;
 } & PropsWithChildren;
 
 export default function Button({
   children,
   btnType = "button",
   className = "",
+  disabled = false,
   clickHandler,
 }: ButtonProps) {
   return (
     <button
       type={btnType}
-      className={`${style[className]} ${inter.className}`}
+      className={`${style[className]} ${inter.className} ${
+        disabled ? style["disabled"] : ""
+      } `}
       onClick={clickHandler}
+      disabled={disabled}
     >
       {children}
     </button>
