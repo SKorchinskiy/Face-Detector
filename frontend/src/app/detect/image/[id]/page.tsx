@@ -1,6 +1,7 @@
 import FaceBoxList from "@/components/face-box-list/face-box-list.component";
 import FaceCanvasList from "@/components/face-canvas-list/face-canvas-list.component";
 import TagList from "@/components/tag-list/tag-list.component";
+import { fetchData } from "@/utils/fetch.util";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -35,31 +36,25 @@ export default async function ImageRecognition({
     id: string;
   };
 }) {
-  const response = await fetch(`http://localhost:8000/detect/${params.id}`, {
-    method: "GET",
+  const imageMetaData: ImageMetaData = await fetchData({
+    url: `http://localhost:8000/images/${params.id}`,
   });
-  const imageMetaData: ImageMetaData = await response.json();
-  const imageShortenerValue = 400 / imageMetaData.width;
-  const recommendations = await (
-    await fetch(`http://localhost:8000/detect/related/${imageMetaData.id}`, {
+  const imageShortenerValue =
+    600 / Math.max(imageMetaData.width, imageMetaData.height);
+  const recentDetections: ImageMetaData[] = await fetchData({
+    url: `http://localhost:8000/images/${params.id}/related`,
+    options: {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ limit: 8 }),
-    })
-  ).json();
-  const recentDetections: ImageMetaData[] = recommendations.data;
-  const tags = await (
-    await fetch(`http://localhost:8000/detect/image/tags`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ url: imageMetaData.url }),
-    })
-  ).json();
-
+    },
+  });
+  const tags = await fetchData({
+    url: `http://localhost:8000/images/${params.id}/tags`,
+    options: { method: "POST" },
+  });
   return (
     <>
       <div
@@ -103,10 +98,7 @@ export default async function ImageRecognition({
             marginLeft: 50,
           }}
         >
-          <FaceCanvasList
-            imageMetaData={imageMetaData}
-            imageShortenerValue={imageShortenerValue}
-          />
+          <FaceCanvasList imageMetaData={imageMetaData} />
         </div>
       </div>
       <div
@@ -117,7 +109,7 @@ export default async function ImageRecognition({
         }}
       >
         <p>tags: </p>
-        <TagList tags={tags.data} />
+        <TagList tags={tags} />
       </div>
       <div
         style={{
@@ -142,25 +134,32 @@ export default async function ImageRecognition({
       </div>
       <div style={{ margin: 50 }}>
         <h2>Similar detections</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}>
+        <div
+          style={{
+            display: "grid",
+            width: "100%",
+            overflow: "clip",
+            gridTemplateColumns: "repeat(4, 1fr)",
+          }}
+        >
           {recentDetections.map((detection, index) => {
             const ratio = detection.width / detection.height;
             return (
               <Link key={index} href={`/detect/image/${detection.id}`}>
-                <div style={{ width: 200, overflow: "clip" }}>
-                  <Image
-                    id="face-to-recognize"
-                    style={{
-                      zIndex: 10,
-                      position: "relative",
-                      margin: 10,
-                    }}
-                    width={200 * ratio}
-                    height={200}
-                    alt="face"
-                    src={detection.url}
-                  />
-                </div>
+                <Image
+                  id="face-to-recognize"
+                  style={{
+                    zIndex: 10,
+                    position: "relative",
+                    width: "95%",
+                    height: "250px",
+                    objectFit: "cover",
+                  }}
+                  width={200 * ratio}
+                  height={200}
+                  alt="face"
+                  src={detection.url}
+                />
               </Link>
             );
           })}
