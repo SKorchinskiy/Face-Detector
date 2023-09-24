@@ -10,6 +10,7 @@ const cors = require("cors");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var detectionRouter = require("./routes/detection");
+const imageRouter = require("./routes/image");
 
 var app = express();
 app.set("port", process.env.PORT || 8000);
@@ -28,6 +29,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/detect", detectionRouter);
+app.use("/images", imageRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
