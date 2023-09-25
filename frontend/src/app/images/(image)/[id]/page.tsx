@@ -1,10 +1,9 @@
 import DetectionList from "@/components/detection-list/detection-list.component";
 import FaceBoxList from "@/components/face-box-list/face-box-list.component";
 import FaceCanvasList from "@/components/face-canvas-list/face-canvas-list.component";
-import TagList from "@/components/tag-list/tag-list.component";
+import NavTagList from "@/components/nav-tag-list/nav-tag-list.component";
 import { fetchData } from "@/utils/fetch.util";
 import Image from "next/image";
-import Link from "next/link";
 
 export type BoundingBox = {
   top_row: number;
@@ -56,9 +55,6 @@ export default async function ImageRecognition({
     url: `http://localhost:8000/images/${params.id}/tags`,
     options: { method: "POST" },
   });
-  const filteredTags = tags
-    .filter((tag) => tag.tag_name.length < 10)
-    .filter((_, index) => index < 5);
   return (
     <>
       <div
@@ -108,12 +104,17 @@ export default async function ImageRecognition({
       <div
         style={{
           display: "flex",
-          alignItems: "center",
+          flexDirection: "column",
           marginLeft: 50,
         }}
       >
-        <p>tags: </p>
-        <TagList tags={filteredTags} />
+        <NavTagList tags={tags} />
+        <span
+          style={{
+            textDecoration: "underline",
+            cursor: "pointer",
+          }}
+        ></span>
       </div>
       <div
         style={{
