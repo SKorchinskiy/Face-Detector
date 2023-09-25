@@ -6,12 +6,11 @@ type TagListProps = {
 };
 
 export default function TagList({ tags }: TagListProps) {
-  const filteredTags = tags
-    .filter((tag) => tag.tag_name.length < 10)
-    .filter((_, index) => index < 5);
   return (
-    <div style={{ display: "flex", flexWrap: "wrap" }}>
-      {filteredTags.map((tag, index) => (
+    <div
+      style={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}
+    >
+      {tags.map((tag, index) => (
         <Tag key={index} tag={tag} />
       ))}
     </div>

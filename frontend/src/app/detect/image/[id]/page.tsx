@@ -1,3 +1,4 @@
+import DetectionList from "@/components/detection-list/detection-list.component";
 import FaceBoxList from "@/components/face-box-list/face-box-list.component";
 import FaceCanvasList from "@/components/face-canvas-list/face-canvas-list.component";
 import TagList from "@/components/tag-list/tag-list.component";
@@ -51,10 +52,13 @@ export default async function ImageRecognition({
       body: JSON.stringify({ limit: 8 }),
     },
   });
-  const tags = await fetchData({
+  const tags: { tag_name: string; probability: number }[] = await fetchData({
     url: `http://localhost:8000/images/${params.id}/tags`,
     options: { method: "POST" },
   });
+  const filteredTags = tags
+    .filter((tag) => tag.tag_name.length < 10)
+    .filter((_, index) => index < 5);
   return (
     <>
       <div
@@ -109,7 +113,7 @@ export default async function ImageRecognition({
         }}
       >
         <p>tags: </p>
-        <TagList tags={tags} />
+        <TagList tags={filteredTags} />
       </div>
       <div
         style={{
@@ -142,27 +146,7 @@ export default async function ImageRecognition({
             gridTemplateColumns: "repeat(4, 1fr)",
           }}
         >
-          {recentDetections.map((detection, index) => {
-            const ratio = detection.width / detection.height;
-            return (
-              <Link key={index} href={`/detect/image/${detection.id}`}>
-                <Image
-                  id="face-to-recognize"
-                  style={{
-                    zIndex: 10,
-                    position: "relative",
-                    width: "95%",
-                    height: "250px",
-                    objectFit: "cover",
-                  }}
-                  width={200 * ratio}
-                  height={200}
-                  alt="face"
-                  src={detection.url}
-                />
-              </Link>
-            );
-          })}
+          <DetectionList detections={recentDetections} />
         </div>
       </div>
     </>

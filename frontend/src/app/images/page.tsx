@@ -1,83 +1,74 @@
 "use client";
 
 import styles from "./page.module.css";
-
-import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 import { fetchData } from "@/utils/fetch.util";
-import Link from "next/link";
-import { ImageMetaData } from "../detect/image/[id]/page";
-import Image from "next/image";
-import NavButton from "@/components/nav-button/nav-button.component";
 
-type Pagination = {
-  hasPrev: boolean;
-  hasNext: boolean;
-  nextPage: number;
-  prevPage: number;
-  pages: number;
+import type { ImageMetaData } from "../detect/image/[id]/page";
+import type { TagElement } from "@/components/tag/tag.component";
+import type { PaginationBarProps } from "@/components/pagination-bar/pagination-bar.component";
+
+import DetectionList from "@/components/detection-list/detection-list.component";
+import PaginationBar from "@/components/pagination-bar/pagination-bar.component";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import TagList from "@/components/tag-list/tag-list.component";
+
+type RecentDetections = {
+  recentDetections: ImageMetaData[];
+} & PaginationBarProps;
+
+type Tag = { count: number } & TagElement;
+
+const DEFAULT_RECENT_DETECTIONS: RecentDetections = {
+  recentDetections: [],
+  pagination: {
+    hasPrev: false,
+    hasNext: false,
+    prevPage: 1,
+    currentPage: 1,
+    nextPage: 1,
+    pages: 1,
+  },
 };
-
-const DEFAULT_PAGINATION: Pagination = {
-  hasPrev: false,
-  hasNext: false,
-  nextPage: 1,
-  prevPage: 1,
-  pages: 1,
-};
-
-const DEFAULT_PAGE = "1";
-
-function isValidPage(page: string | null, pages: number) {
-  return (
-    !!page &&
-    Number.isInteger(Number(page)) &&
-    Number(page) > 0 &&
-    Number(page) <= pages
-  );
-}
-
-function prevPage(page: string | null) {
-  if (!page) {
-    return 1;
-  }
-  const current = Number(page);
-  return current > 1 ? current - 1 : 1;
-}
 
 export default function Imges() {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const [detections, setDetections] = useState<ImageMetaData[]>([]);
-  const [pagination, setPagination] = useState<Pagination>(DEFAULT_PAGINATION);
+  const [detections, setDetections] = useState<RecentDetections>(
+    DEFAULT_RECENT_DETECTIONS
+  );
+  const [tags, setTags] = useState<Tag[]>([]);
 
-  const page = searchParams.get("page");
+  const parsePageOrReturnDefault = (page: string | null) => {
+    if (!page || !Number.isInteger(Number(page))) return 1;
+    const parsedPage = Number(page);
+    return parsedPage > 0 ? parsedPage : 1;
+  };
+
   useEffect(() => {
-    const isValid = isValidPage(page, pagination.pages);
-
-    if (!isValid) {
-      router.push(`/images?page=${DEFAULT_PAGE}`);
-    }
-  }, [page, pagination, router]);
-
-  useEffect(() => {
-    const fetchRecentDetections = async () => {
-      const url = `http://localhost:8000/images/recent?page=${page}&limit=${12}`;
-      const options: RequestInit = {
-        method: "GET",
-      };
-      const { recentDetections, ...pagination } = await fetchData({
-        url,
-        options,
-      });
-      const prevPage = pagination.hasPrev ? Number(page) - 1 : Number(page);
-      const nextPage = pagination.hasNext ? Number(page) + 1 : Number(page);
-
-      setPagination({ ...pagination, prevPage, nextPage });
-      setDetections(recentDetections);
+    const getTags = async () => {
+      const url = `http://localhost:8000/images/tags/${10}`;
+      const topTags = await fetchData({ url });
+      setTags(topTags);
     };
-    if (isValidPage(page, pagination.pages)) fetchRecentDetections();
-  }, [page, pagination]);
+
+    getTags();
+  }, []);
+
+  useEffect(() => {
+    const currentPage = parsePageOrReturnDefault(searchParams.get("page"));
+    const fetchImages = async () => {
+      const tags = searchParams.get("tags");
+      const url =
+        `http://localhost:8000/images/recent?page=${currentPage}&limit=${8}` +
+        (tags ? `&tags=${tags}` : "");
+      const options = { method: "GET" };
+      const { recentDetections, pagination }: RecentDetections =
+        await fetchData({ url, options });
+      setDetections({ recentDetections, pagination });
+    };
+
+    fetchImages();
+  }, [searchParams]);
 
   return (
     <div
@@ -88,54 +79,15 @@ export default function Imges() {
         width: "100%",
       }}
     >
-      <div
-        style={{
-          width: "90%",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <NavButton
-          path={`images?page=${prevPage(page)}`}
-          className="back-and-forth"
-          disabled={!pagination.hasPrev}
-        >
-          {pagination.prevPage}
-        </NavButton>
-        <div className={styles.headline}>
-          <h1>Page: {page}</h1>
-        </div>
-        <NavButton
-          path={`images?page=${Number(page) + 1}`}
-          className="back-and-forth"
-          disabled={!pagination.hasNext}
-        >
-          {pagination.nextPage}
-        </NavButton>
-      </div>
       <div className={styles["detections-container"]}>
+        <div className={styles["tags-container"]}>
+          <TagList tags={tags} />
+        </div>
         <div className={styles["detections-data"]}>
-          {detections.map((detection, index) => {
-            const ratio = 200 / detection.height;
-            return (
-              <Link key={index} href={`/detect/image/${detection.id}`}>
-                <div key={index} className={styles["detection-container"]}>
-                  <Image
-                    id="face-to-recognize"
-                    style={{
-                      zIndex: 10,
-                      position: "relative",
-                    }}
-                    width={detection.width * ratio}
-                    height={detection.height * ratio}
-                    alt="face"
-                    src={detection.url}
-                  />
-                </div>
-              </Link>
-            );
-          })}
+          <DetectionList detections={detections.recentDetections} />
+        </div>
+        <div className={styles["page-pagination"]}>
+          <PaginationBar pagination={detections.pagination} />
         </div>
       </div>
     </div>
