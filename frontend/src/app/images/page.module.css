@@ -24,7 +24,7 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding: 50px;
+  /* padding: 50px; */
 }
 
 .page-pagination {
@@ -32,14 +32,14 @@
   position: relative;
   width: 90%;
   justify-content: center;
-  bottom: -50px;
+  margin: 50px;
   margin-bottom: 20px;
 }
 
 .detections-data {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-
+  margin-top: 40px;
   overflow: clip;
   max-width: 90%;
   padding: 3px;

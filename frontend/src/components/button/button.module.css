@@ -1,4 +1,5 @@
-.btn-container {
+.btn-container,
+.btn-container-mini {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -15,7 +16,8 @@
   text-transform: uppercase;
 }
 
-.back-and-forth {
+.back-and-forth,
+.back-and-forth-mini {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,6 +32,11 @@
   transition-duration: 0.1s;
   font-size: 18px;
   text-transform: uppercase;
+}
+
+.back-and-forth-mini {
+  height: 40px;
+  width: 120px;
 }
 
 .btn-paginate-active,
