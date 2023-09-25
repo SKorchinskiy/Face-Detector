@@ -1,7 +1,9 @@
+import Navbar from "@/components/navbar/navbar.component";
 import "./globals.css";
 import ParticlesBackground from "@/components/particles/particles.component";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import TagsProvider from "@/context/tags.context";
 
 const inter = Inter({
   weight: "800",
@@ -21,7 +23,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {children}
+        <Navbar />
+        <TagsProvider>{children}</TagsProvider>
         <ParticlesBackground />
       </body>
     </html>

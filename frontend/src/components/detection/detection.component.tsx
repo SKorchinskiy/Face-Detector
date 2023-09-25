@@ -1,4 +1,4 @@
-import { ImageMetaData } from "@/app/detect/image/[id]/page";
+import { ImageMetaData } from "@/app/images/(image)/[id]/page";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -8,7 +8,7 @@ type DetectionProps = {
 
 export default function Detection({ detection }: DetectionProps) {
   return (
-    <Link href={`/detect/image/${detection.id}`}>
+    <Link href={`/images/${detection.id}`}>
       <Image
         id="face-to-recognize"
         style={{

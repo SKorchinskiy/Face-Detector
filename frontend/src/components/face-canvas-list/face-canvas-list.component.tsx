@@ -1,4 +1,7 @@
-import type { ImageMetaData, DetectedFace } from "@/app/detect/image/[id]/page";
+import type {
+  ImageMetaData,
+  DetectedFace,
+} from "@/app/images/(image)/[id]/page";
 import FaceCanvas from "../face-canvas/face-canvas.component";
 
 type FaceCanvasListProps = {

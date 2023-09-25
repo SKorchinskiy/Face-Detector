@@ -1,8 +1,6 @@
 "use client";
 
-import { TagsContext } from "@/context/tags.context";
-
-import { MouseEvent, useContext, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export type TagElement = {
   tag_name: string;
@@ -10,17 +8,10 @@ export type TagElement = {
 
 type TagProps = {
   tag: TagElement;
-  onClick?: (event: MouseEvent<HTMLDivElement>) => {};
 };
 
-export default function Tag({ tag, onClick }: TagProps) {
-  const [isSelected, setIsSelected] = useState(false);
-  const { selectedTags, toggleTag } = useContext(TagsContext);
-
-  useEffect(() => {
-    const isIncluded = selectedTags.includes(tag.tag_name);
-    if (isIncluded) setIsSelected(isIncluded);
-  }, []);
+export default function NavTag({ tag }: TagProps) {
+  const router = useRouter();
 
   return (
     <div
@@ -34,11 +25,7 @@ export default function Tag({ tag, onClick }: TagProps) {
         alignItems: "center",
         cursor: "pointer",
       }}
-      onClick={(event) => {
-        setIsSelected((prev) => !prev);
-        toggleTag(tag.tag_name);
-        onClick && onClick(event);
-      }}
+      onClick={(e) => router.push(`/images?tags=${tag.tag_name}`)}
     >
       <div
         style={{
@@ -47,7 +34,7 @@ export default function Tag({ tag, onClick }: TagProps) {
           alignItems: "center",
           fontSize: 13,
           color: "white",
-          background: isSelected ? "#352F44" : "#726A95",
+          background: "#726A95",
           width: "150px",
           height: "20px",
           borderRadius: "5px",

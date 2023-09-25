@@ -2,7 +2,6 @@
 
 import styles from "./image-drop.module.css";
 
-import Image from "next/image";
 import { DragEvent, Fragment, useState } from "react";
 import Field from "../field/field.component";
 import { useRouter } from "next/navigation";
@@ -33,7 +32,7 @@ export default function ImageDrop({ processUpload }: ImageDropProps) {
     event.preventDefault();
     setDragOver(false);
     const imageId = await processUpload(event.dataTransfer.files[0]);
-    router.push(`detect/image/${imageId}`);
+    router.push(`images/${imageId}`);
   };
 
   const onDragOverEndHandler = (event: DragEvent<HTMLDivElement>) => {
@@ -49,7 +48,7 @@ export default function ImageDrop({ processUpload }: ImageDropProps) {
       );
       const file = await fileHandle.getFile();
       const imageId = await processUpload(file);
-      router.push(`detect/image/${imageId}`);
+      router.push(`images/${imageId}`);
     } catch (error) {
       console.log(error);
     } finally {
