@@ -1,9 +1,10 @@
 const express = require("express");
 const {
+  addTagsToDB,
   getImageFromDB,
   getRecentDetections,
   getRecommendedDetections,
-  getTotalImageCount,
+  getTopTags,
 } = require("../lib/db");
 const { getGeneralImageData } = require("../lib/ai/general-recognition.model");
 const { getPagination } = require("../lib/utils/query.util");
@@ -22,18 +23,29 @@ imageRouter.post("/:id/tags", async (req, res) => {
   const id = +req.params.id;
   const { url } = await getImageFromDB(id);
   const tags = await getGeneralImageData({ url });
+  const tagsAdded = await addTagsToDB(id, tags);
   return res.status(200).json({ data: tags });
 });
 
 imageRouter.get("/recent", async (req, res) => {
+  const tags = req.query.tags?.split(",") || [];
   const { limit, skip, getMetaData } = getPagination(req.query);
-  const recentDetections = await getRecentDetections(limit, skip);
-  const { "count(*)": total } = await getTotalImageCount();
+  const { recentDetections, total } = await getRecentDetections(
+    limit,
+    skip,
+    tags
+  );
 
-  const pageMeta = getMetaData(total);
+  const { pagination } = getMetaData(total);
 
-  const data = { recentDetections, ...pageMeta };
+  const data = { recentDetections, pagination };
   return res.status(200).json({ data });
+});
+
+imageRouter.get("/tags/:limit", async (req, res) => {
+  const limit = +req.params.limit;
+  const topTags = await getTopTags(limit);
+  return res.status(200).json({ data: topTags });
 });
 
 imageRouter.get("/:id", async (req, res) => {

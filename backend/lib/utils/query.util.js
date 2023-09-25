@@ -16,11 +16,19 @@ function getMetaData(skip, limit, total) {
   const hasPrev = !!skip;
   const hasNext = skip + limit < total;
   const pages = Math.ceil(total / limit);
+  const currentPage = skip / limit + 1;
+  const prevPage = hasPrev ? currentPage - 1 : currentPage;
+  const nextPage = hasNext ? currentPage + 1 : currentPage;
 
   return {
-    hasPrev,
-    hasNext,
-    pages,
+    pagination: {
+      hasPrev,
+      hasNext,
+      currentPage,
+      prevPage,
+      nextPage,
+      pages,
+    },
   };
 }
 
