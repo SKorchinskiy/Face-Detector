@@ -22,7 +22,7 @@
   border-radius: 5px;
   height: 50px;
   width: 150px;
-  background: rgb(50, 113, 168);
+  background: #393646;
   color: #fff;
   user-select: none;
   cursor: pointer;
@@ -30,6 +30,29 @@
   transition-duration: 0.1s;
   font-size: 18px;
   text-transform: uppercase;
+}
+
+.btn-paginate-active,
+.btn-paginate {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0px;
+  border-radius: 5px;
+  padding: 15px;
+  background: #7c81ad;
+  color: #fff;
+  min-width: 50px;
+  user-select: none;
+  cursor: pointer;
+
+  transition-duration: 0.1s;
+  font-size: 18px;
+  text-transform: uppercase;
+}
+
+.btn-paginate-active {
+  background: #4f4557;
 }
 
 .btn-container:hover {
@@ -41,6 +64,7 @@
 }
 
 .disabled {
-  background: rgba(97, 97, 97);
+  background: #cfd2cf;
+  border: 0px;
   cursor: default;
 }
