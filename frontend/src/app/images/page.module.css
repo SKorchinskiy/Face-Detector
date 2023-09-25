@@ -21,8 +21,19 @@
 
 .detections-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
+  padding: 50px;
+}
+
+.page-pagination {
+  display: flex;
+  position: relative;
+  width: 90%;
+  justify-content: center;
+  bottom: -50px;
+  margin-bottom: 20px;
 }
 
 .detections-data {
@@ -30,8 +41,13 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 
   overflow: clip;
-  width: 90%;
+  max-width: 90%;
   padding: 3px;
+}
+
+.tags-container {
+  display: flex;
+  max-width: 90%;
 }
 
 .detections-data a {
