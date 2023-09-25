@@ -8,12 +8,17 @@ type NavButtonProps = {
 export default function NavButton({
   path,
   children,
-  disabled = false,
+  disabled,
+  clickHandler,
   className = "",
 }: NavButtonProps) {
   return (
     <Link style={{ textDecoration: "none" }} href={disabled ? "#" : path}>
-      <Button className={className} disabled={disabled}>
+      <Button
+        className={className}
+        disabled={disabled}
+        clickHandler={clickHandler}
+      >
         {children}
       </Button>
     </Link>
