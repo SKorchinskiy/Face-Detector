@@ -19,7 +19,7 @@ export default function Detect() {
           urlFieldRef.current?.focus();
         } else {
           processUrlDetection(imageUrl).then((id) => {
-            router.push(`/detect/image/${id}`);
+            router.push(`/images/${id}`);
           });
         }
       }
