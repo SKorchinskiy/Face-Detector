@@ -12,7 +12,7 @@ detectionRouter.post("/", async (req, res) => {
 
   const { id } = await processImage(data);
 
-  return res.status(201).json({ id });
+  return res.status(201).json({ data: id });
 });
 
 module.exports = detectionRouter;

@@ -12,7 +12,7 @@ function setUpImageModel(config) {
             version_id: config.MODEL_VERSION_ID,
             inputs: [
               {
-                data: { image: { ...data, allow_duplicate_url: true } },
+                data: { image: { ...data } },
               },
             ],
           },
@@ -21,7 +21,6 @@ function setUpImageModel(config) {
             if (err) {
               reject(err);
             }
-
             if (response.status.code !== 10000) {
               reject(
                 "Post model outputs failed, status: " +
@@ -34,7 +33,7 @@ function setUpImageModel(config) {
       );
       return response;
     } catch (error) {
-      console.log({ error });
+      console.error({ error });
       return error;
     }
   };
