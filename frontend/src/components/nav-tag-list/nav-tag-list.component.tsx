@@ -20,7 +20,6 @@ export default function NavTagList({ tags }: TagListProps) {
       <div
         style={{
           display: "flex",
-          justifyContent: "center",
           alignItems: "center",
           flexWrap: "wrap",
         }}

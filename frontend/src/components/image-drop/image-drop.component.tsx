@@ -21,7 +21,7 @@ const dropOptions = {
 };
 
 type ImageDropProps = {
-  processUpload: (file: any) => Promise<string>;
+  processUpload: (file: any) => Promise<string | number | void>;
 };
 
 export default function ImageDrop({ processUpload }: ImageDropProps) {
@@ -50,7 +50,7 @@ export default function ImageDrop({ processUpload }: ImageDropProps) {
       const imageId = await processUpload(file);
       router.push(`images/${imageId}`);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setDragOver(false);
     }
