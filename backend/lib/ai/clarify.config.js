@@ -9,11 +9,13 @@ const APP_ID = process.env.AI_APP_ID;
 const MODEL_ID = process.env.AI_MODEL_ID;
 const GENERAL_MODEL_ID = process.env.AI_GENERAL_MODEL_ID;
 const CLUSTER_MODEL_ID = process.env.AI_CLUSTER_MODEL_ID;
+const EMBEDDER_MODEL_ID = process.env.AI_EMBEDDER_MODEL_ID;
 
 // models version id
 const MODEL_VERSION_ID = process.env.AI_MODEL_VERSION_ID;
 const GENERAL_MODEL_VERSION_ID = process.env.AI_GENERAL_MODEL_VERSION_ID;
 const CLUSTER_MODEL_VERSION_ID = process.env.AI_CLUSTER_MODEL_VERSION_ID;
+const EMBEDDER_MODEL_VERSION_ID = process.env.AI_EMBEDDER_MODEL_VERSION_ID;
 
 const stub = ClarifaiStub.grpc();
 
@@ -22,6 +24,8 @@ const metadata = new grpc.Metadata();
 metadata.set("authorization", "Key " + PAT);
 
 module.exports = {
+  stub,
+  metadata,
   PAT,
   USER_ID,
   APP_ID,
@@ -29,8 +33,8 @@ module.exports = {
   GENERAL_MODEL_ID,
   CLUSTER_MODEL_ID,
   MODEL_VERSION_ID,
+  EMBEDDER_MODEL_ID,
   GENERAL_MODEL_VERSION_ID,
   CLUSTER_MODEL_VERSION_ID,
-  metadata,
-  stub,
+  EMBEDDER_MODEL_VERSION_ID,
 };
