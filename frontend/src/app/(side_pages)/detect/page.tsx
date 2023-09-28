@@ -4,6 +4,7 @@ import styles from "./page.module.css";
 
 import Field from "@/components/field/field.component";
 import ImageDrop from "@/components/image-drop/image-drop.component";
+import { fetchData } from "@/utils/fetch.util";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 
@@ -34,28 +35,32 @@ export default function Detect() {
   };
 
   const processUrlDetection = async (url: string) => {
-    const res = await fetch("http://localhost:8000/detect", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const id = await fetchData({
+      url: "http://localhost:8000/detect",
+      options: {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url }),
       },
-      body: JSON.stringify({ url }),
     });
-    const { id } = await res.json();
     return id;
   };
 
   const processFaceDetection = async (file: any) => {
     const data = await file.arrayBuffer();
     const image = Buffer.from(data);
-    const res = await fetch("http://localhost:8000/detect", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const id = await fetchData({
+      url: "http://localhost:8000/detect",
+      options: {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ base64: image }),
       },
-      body: JSON.stringify({ base64: image }),
     });
-    const { id } = await res.json();
     return id;
   };
 

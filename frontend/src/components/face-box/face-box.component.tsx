@@ -12,7 +12,8 @@ export default function FaceBox({
       id={`face-box-${id}`}
       style={{
         position: "absolute",
-        border: "5px solid black",
+        border: "3px dashed #E1D7C6",
+        boxSizing: "border-box",
         width: `${width}px`,
         height: `${height}px`,
         zIndex: 100,

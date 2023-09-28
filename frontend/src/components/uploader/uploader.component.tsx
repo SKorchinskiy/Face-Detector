@@ -1,11 +1,10 @@
 "use client";
 
-import styles from "./image-drop.module.css";
-
-import { DragEvent, Fragment, useState } from "react";
+import { fetchData } from "@/utils/fetch.util";
 import Field from "../field/field.component";
-import { useRouter } from "next/navigation";
 import NavButton from "../nav-button/nav-button.component";
+import styles from "./uploader.module.css";
+import { DragEvent, Fragment, useEffect, useState } from "react";
 
 const dropOptions = {
   types: [
@@ -20,19 +19,40 @@ const dropOptions = {
   multiple: false,
 };
 
-type ImageDropProps = {
+type UploaderProps = {
   processUpload: (file: any) => Promise<string | number | void>;
 };
 
-export default function ImageDrop({ processUpload }: ImageDropProps) {
+export default function Uploader({ processUpload }: UploaderProps) {
   const [dragOver, setDragOver] = useState(false);
-  const router = useRouter();
+  const [source, setSource] = useState<File>();
+
+  useEffect(() => {
+    const callServer = async () => {
+      if (!source) return;
+      const data = await source.arrayBuffer();
+      const image = Buffer.from(data);
+      const id = await fetchData({
+        url: "http://localhost:8000/detect",
+        options: {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ base64: image }),
+        },
+      });
+      await processUpload(id);
+    };
+
+    if (source) callServer();
+  }, [source]);
 
   const onDropHandler = async (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     setDragOver(false);
-    const imageId = await processUpload(event.dataTransfer.files[0]);
-    router.push(`images/${imageId}`);
+    setSource(event.dataTransfer.files[0]);
+    // const imageId = await processUpload(event.dataTransfer.files[0]);
   };
 
   const onDragOverEndHandler = (event: DragEvent<HTMLDivElement>) => {
@@ -47,8 +67,8 @@ export default function ImageDrop({ processUpload }: ImageDropProps) {
         dropOptions
       );
       const file = await fileHandle.getFile();
-      const imageId = await processUpload(file);
-      router.push(`images/${imageId}`);
+      setSource(file);
+      // const imageId = await processUpload(file);
     } catch (error) {
       console.error(error);
     } finally {
@@ -58,7 +78,6 @@ export default function ImageDrop({ processUpload }: ImageDropProps) {
 
   return (
     <Fragment>
-      {/* {image ? <div className={styles["loading-effect"]}></div> : <></>} */}
       <div
         className={styles["image-drop-container"]}
         style={{
@@ -98,14 +117,6 @@ export default function ImageDrop({ processUpload }: ImageDropProps) {
           <p>OR</p>
           <p>Drag and Drop</p>
         </div>
-      </div>
-      <div className={styles["nav-buttons-container"]}>
-        <NavButton className="back-and-forth" path="/">
-          Back
-        </NavButton>
-        <NavButton className="back-and-forth" path="/image">
-          Next
-        </NavButton>
       </div>
     </Fragment>
   );

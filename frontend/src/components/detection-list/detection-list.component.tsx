@@ -1,4 +1,4 @@
-import type { ImageMetaData } from "@/app/images/(image)/[id]/page";
+import type { ImageMetaData } from "@/app/(side_pages)/images/(image)/[id]/page";
 import Detection from "../detection/detection.component";
 
 type DetectionListProps = {

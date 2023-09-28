@@ -1,4 +1,4 @@
-import { ImageMetaData } from "@/app/images/(image)/[id]/page";
+import { ImageMetaData } from "@/app/(side_pages)/images/(image)/[id]/page";
 import Image from "next/image";
 import Link from "next/link";
 

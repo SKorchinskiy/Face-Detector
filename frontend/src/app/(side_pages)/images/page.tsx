@@ -20,7 +20,7 @@ import React, {
 import { usePathname, useSearchParams } from "next/navigation";
 import Sidebar from "@/components/side-bar/side-bar.component";
 import Image from "next/image";
-import TagsProvider, { TagsContext } from "@/context/tags.context";
+import { TagsContext } from "@/context/tags.context";
 import { useRouter } from "next/navigation";
 
 type RecentDetections = {

@@ -56,12 +56,11 @@ export default async function ImageRecognition({
     options: { method: "POST" },
   });
   return (
-    <>
+    <div style={{ padding: "30px" }}>
       <div
         style={{
           display: "flex",
           width: "100%",
-          margin: 50,
         }}
       >
         <div
@@ -95,7 +94,13 @@ export default async function ImageRecognition({
         </div>
         <div
           style={{
-            marginLeft: 50,
+            maxHeight: `${Math.floor(
+              imageMetaData.height * imageShortenerValue
+            )}px`,
+            marginLeft: 30,
+            background: "#F8F4EA",
+            overflow: "scroll",
+            border: "1px solid black",
           }}
         >
           <FaceCanvasList imageMetaData={imageMetaData} />
@@ -105,7 +110,6 @@ export default async function ImageRecognition({
         style={{
           display: "flex",
           flexDirection: "column",
-          marginLeft: 50,
         }}
       >
         <NavTagList tags={tags} />
@@ -119,25 +123,27 @@ export default async function ImageRecognition({
       <div
         style={{
           width: "80%",
-          margin: 50,
+          margin: 10,
           display: "flex",
           justifyContent: "space-between",
         }}
       >
         <div>
-          <p>creation: {imageMetaData.created_at}</p>
+          <p>user: guest</p>
+          <p>expires in: {imageMetaData.expiration || "-"}</p>
           <p>
             size(mb):{" "}
             {Math.round((imageMetaData.bytes / 1024 ** 2) * 10000) / 10000}
           </p>
-          <p>expires in: {imageMetaData.expiration || "-"}</p>
-        </div>
-        <div>
-          <p>user: guest</p>
+          <p>creation: {imageMetaData.created_at}</p>
           <p>origin url: {imageMetaData.url}</p>
         </div>
       </div>
-      <div style={{ margin: 50 }}>
+      <div
+        style={{
+          marginTop: "50px",
+        }}
+      >
         <h2>Similar detections</h2>
         <div
           style={{
@@ -150,6 +156,6 @@ export default async function ImageRecognition({
           <DetectionList detections={recentDetections} />
         </div>
       </div>
-    </>
+    </div>
   );
 }

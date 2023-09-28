@@ -1,4 +1,3 @@
-import Navbar from "@/components/navbar/navbar.component";
 import "./globals.css";
 import ParticlesBackground from "@/components/particles/particles.component";
 import type { Metadata } from "next";
@@ -23,7 +22,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Navbar />
         <TagsProvider>{children}</TagsProvider>
         <ParticlesBackground />
       </body>

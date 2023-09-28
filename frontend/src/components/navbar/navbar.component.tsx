@@ -43,6 +43,16 @@ export default function Navbar() {
           <span>Detect</span>
         </Link>
         <Link
+          href={"/compare"}
+          style={{
+            color: "white",
+            textDecoration: "none",
+            width: "fit-content",
+          }}
+        >
+          <span>Compare</span>
+        </Link>
+        <Link
           href={"/images"}
           style={{ color: "white", textDecoration: "none" }}
         >
@@ -57,7 +67,16 @@ export default function Navbar() {
           width: "50%",
         }}
       >
-        <span>Sign In</span>
+        <div
+          style={{
+            width: "50%",
+            display: "flex",
+            justifyContent: "space-around",
+          }}
+        >
+          <span>Sign In</span>
+          <span>Sign Up</span>
+        </div>
       </div>
     </div>
   );
