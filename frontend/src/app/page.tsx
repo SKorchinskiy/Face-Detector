@@ -6,11 +6,7 @@ import NavButton from "@/components/nav-button/nav-button.component";
 export default function Home() {
   return (
     <Fragment>
-      <div
-        style={{
-          height: "300px",
-        }}
-      >
+      <div style={{ height: "300px" }}>
         <Image
           src="/face.png"
           width="350"
