@@ -23,8 +23,10 @@ imageRouter.post("/:id/tags", async (req, res) => {
   const id = +req.params.id;
   const { url } = await getImageFromDB(id);
   const tags = await getGeneralImageData({ url });
-  const tagsAdded = await addTagsToDB(id, tags);
-  return res.status(200).json({ data: tags });
+  await addTagsToDB(id, tags);
+  return res
+    .status(200)
+    .json({ data: tags.filter(({ probability }) => probability >= 0.9) });
 });
 
 imageRouter.get("/recent", async (req, res) => {
