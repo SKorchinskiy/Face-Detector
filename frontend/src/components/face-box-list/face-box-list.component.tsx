@@ -1,4 +1,7 @@
-import { DetectedFace, ImageMetaData } from "@/app/images/(image)/[id]/page";
+import {
+  DetectedFace,
+  ImageMetaData,
+} from "@/app/(side_pages)/images/(image)/[id]/page";
 import FaceBox from "../face-box/face-box.component";
 
 type FaceBoxListProps = {
