@@ -1,3 +1,5 @@
+import styles from "./detection.module.css";
+
 import { ImageMetaData } from "../../../images/(image)/[id]/page";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,13 +13,7 @@ export default function Detection({ detection }: DetectionProps) {
     <Link href={`/images/${detection.id}`}>
       <Image
         id="face-to-recognize"
-        style={{
-          zIndex: 10,
-          position: "relative",
-          width: "95%",
-          height: "250px",
-          objectFit: "cover",
-        }}
+        className={styles["detection-image"]}
         width={detection.width}
         height={detection.height}
         alt="face"

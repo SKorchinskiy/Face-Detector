@@ -1,0 +1,6 @@
+.face-box {
+  position: absolute;
+  border: 3px dashed #e1d7c6;
+  box-sizing: border-box;
+  z-index: 100;
+}
