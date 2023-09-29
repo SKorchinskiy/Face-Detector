@@ -2,111 +2,72 @@
 
 import styles from "./image-drop.module.css";
 
-import { DragEvent, Fragment, useState } from "react";
+import { DragEvent, useState } from "react";
+
 import Field from "../ui/field/field.component";
-import { useRouter } from "next/navigation";
-import NavButton from "../../../_components/ui/nav-button/nav-button.component";
+import { ImageConfig } from "../../_configs/image.config";
 
-const dropOptions = {
-  types: [
-    {
-      description: "Image",
-      accept: {
-        "image/*": [".png", ".jpg", ".jpeg"],
-      },
-    },
-  ],
-  excludeAcceptAllOption: true,
-  multiple: false,
-};
+type ImageDropProps = { imageUploadHandler: (file: File) => Promise<void> };
 
-type ImageDropProps = {
-  processUpload: (file: any) => Promise<string | number | void>;
-};
+export default function ImageDrop({ imageUploadHandler }: ImageDropProps) {
+  const [dragEnter, setDragEnter] = useState(false);
 
-export default function ImageDrop({ processUpload }: ImageDropProps) {
-  const [dragOver, setDragOver] = useState(false);
-  const router = useRouter();
+  const toggleDragEnter = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setDragEnter((prev) => !prev);
+  };
 
   const onDropHandler = async (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    setDragOver(false);
-    const imageId = await processUpload(event.dataTransfer.files[0]);
-    router.push(`images/${imageId}`);
-  };
-
-  const onDragOverEndHandler = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setDragOver(true);
+    setDragEnter(false);
+    try {
+      const imageFile = event.dataTransfer.files[0];
+      await imageUploadHandler(imageFile);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const onUploadHandler = async () => {
-    setDragOver(true);
+    setDragEnter(true);
     try {
       const [fileHandle] = await (window as any).showOpenFilePicker(
-        dropOptions
+        ImageConfig
       );
-      const file = await fileHandle.getFile();
-      const imageId = await processUpload(file);
-      router.push(`images/${imageId}`);
+      const imageFile = await fileHandle.getFile();
+      setDragEnter(false);
+      await imageUploadHandler(imageFile);
     } catch (error) {
       console.error(error);
-    } finally {
-      setDragOver(false);
+      setDragEnter(false);
     }
   };
 
   return (
-    <Fragment>
-      {/* {image ? <div className={styles["loading-effect"]}></div> : <></>} */}
-      <div
-        className={styles["image-drop-container"]}
-        style={{
-          background: dragOver ? "rgba(0, 0, 0, 0.3)" : "rgba(0, 0, 0, 0.1)",
-        }}
-        onClick={onUploadHandler}
-        onDrop={onDropHandler}
-        onDragOver={onDragOverEndHandler}
-        onDragLeave={onDragOverEndHandler}
-      >
-        <Field
-          id="file-pick"
-          type="file"
-          onFieldChange={() => {}}
-          className="file-pick"
-          placeholder=""
-          value=""
-        />
-        <div
-          style={{
-            position: "absolute",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{
-              background: "rgba(179, 92, 0)",
-              padding: "10px",
-              borderRadius: "10px",
-            }}
-            className={styles["image-drop-element"]}
-          >
-            Upload Image
-          </div>
-          <p>OR</p>
-          <p>Drag and Drop</p>
+    <div
+      className={`${styles["image-drop"]} ${
+        dragEnter ? styles["drag-enter"] : ""
+      }`}
+      onDrop={onDropHandler}
+      onClick={onUploadHandler}
+      onDragEnter={toggleDragEnter}
+      onDragLeave={toggleDragEnter}
+    >
+      <Field
+        id="file-pick"
+        type="file"
+        placeholder=""
+        value=""
+        className="file-pick"
+        onFieldChange={() => {}}
+      />
+      <div className={styles["image-drop__body"]}>
+        <div className={styles["image-drop-element"]}>
+          <p>Upload Image</p>
         </div>
+        <p>OR</p>
+        <p>Drag and Drop</p>
       </div>
-      <div className={styles["nav-buttons-container"]}>
-        <NavButton className="back-and-forth" path="/">
-          Back
-        </NavButton>
-        <NavButton className="back-and-forth" path="/image">
-          Next
-        </NavButton>
-      </div>
-    </Fragment>
+    </div>
   );
 }
