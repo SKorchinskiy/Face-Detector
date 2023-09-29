@@ -3,6 +3,7 @@ import ParticlesBackground from "./_components/ui/particles/particles.component"
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import TagsProvider from "./(nav_pages)/_context/tags.context";
+import { PropsWithChildren } from "react";
 
 const inter = Inter({
   weight: "800",
@@ -14,11 +15,7 @@ export const metadata: Metadata = {
   description: "Detect Faces on the Provided Images",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
       <body className={inter.className}>
