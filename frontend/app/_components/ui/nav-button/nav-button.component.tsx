@@ -1,26 +1,21 @@
 import Link from "next/link";
 import Button, { ButtonProps } from "../button/button.component";
 
-type NavButtonProps = {
-  path: string;
-} & ButtonProps;
+type NavButtonProps = { path: string } & ButtonProps;
+
+const defaultProps: NavButtonProps = { path: "#", children: <></> };
 
 export default function NavButton({
   path,
   children,
-  disabled,
-  clickHandler,
-  className = "",
-}: NavButtonProps) {
+  ...options
+} = defaultProps) {
   return (
-    <Link style={{ textDecoration: "none" }} href={disabled ? "#" : path}>
-      <Button
-        className={className}
-        disabled={disabled}
-        clickHandler={clickHandler}
-      >
-        {children}
-      </Button>
+    <Link
+      style={{ textDecoration: "none" }}
+      href={options?.disabled ? "#" : path}
+    >
+      <Button {...options}>{children}</Button>
     </Link>
   );
 }
