@@ -6,41 +6,27 @@ import NavButton from "./_components/ui/nav-button/nav-button.component";
 export default function Home() {
   return (
     <Fragment>
-      <div style={{ height: "300px" }}>
+      <div className={styles["faces-container"]}>
         <Image
           src="/face.png"
           width="350"
           height="350"
-          style={{
-            position: "absolute",
-            zIndex: 10,
-            transform: "rotate(-25deg)",
-            left: "60px",
-          }}
+          className={`${styles["face-image"]} ${styles["rotate-left"]}`}
           alt="face"
         />
         <Image
           src="/face.png"
           width="350"
           height="350"
-          style={{
-            position: "absolute",
-            zIndex: 10,
-            transform: "rotate(25deg)",
-            right: "60px",
-          }}
+          className={`${styles["face-image"]} ${styles["rotate-right"]}`}
           alt="face"
         />
       </div>
-      <div className={styles.container}>
-        <h1 className={styles.headline}>Detect Faces Using Images</h1>
-        <div
-          style={{
-            display: "flex",
-            width: "750px",
-            justifyContent: "space-between",
-          }}
-        >
+      <div className={styles["content-container"]}>
+        <h1 className={styles["content-container__headline"]}>
+          Detect Faces Using Images
+        </h1>
+        <div className={styles["content-container__body"]}>
           <NavButton className="btn-container" path="/detect">
             Try Now
           </NavButton>
@@ -48,7 +34,7 @@ export default function Home() {
             Sign Up
           </NavButton>
         </div>
-        <div className={styles.container}>
+        <div className={styles["content-container__footnote"]}>
           <h1
             style={{
               position: "absolute",
