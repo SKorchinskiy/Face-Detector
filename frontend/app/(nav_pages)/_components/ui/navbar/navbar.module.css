@@ -1,0 +1,37 @@
+.navbar-container {
+  top: 0;
+  color: white;
+  height: 50px;
+  z-index: 1000;
+  display: flex;
+  position: sticky;
+  align-items: center;
+  text-transform: uppercase;
+  background: rgba(60, 64, 72, 0.8);
+}
+
+.navbar-container__left {
+  display: flex;
+  padding: 50px;
+  width: 25%;
+}
+
+.navbar-container__center {
+  display: flex;
+  justify-content: space-evenly;
+  width: 50%;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+}
+
+.navbar-container__right {
+  display: flex;
+  justify-content: space-around;
+  padding-left: 50px;
+  width: 25%;
+}
+
+.link {
+  color: white;
+  text-decoration: none;
+}
