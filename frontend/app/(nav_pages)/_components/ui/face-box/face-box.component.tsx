@@ -1,3 +1,5 @@
+import styles from "./face-box.module.css";
+
 export default function FaceBox({
   id,
   width,
@@ -10,13 +12,10 @@ export default function FaceBox({
   return (
     <div
       id={`face-box-${id}`}
+      className={styles["face-box"]}
       style={{
-        position: "absolute",
-        border: "3px dashed #E1D7C6",
-        boxSizing: "border-box",
         width: `${width}px`,
         height: `${height}px`,
-        zIndex: 100,
         marginLeft: `${marginLeft}px`,
         marginTop: `${marginTop}px`,
       }}

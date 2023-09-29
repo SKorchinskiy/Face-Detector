@@ -1,17 +1,6 @@
-import { ImageMetaData } from "../images/(image)/[id]/page";
-
-export type FaceCanvasProps = {
-  id: number;
-  canvasId: string;
-  image_url: string;
-  box_width: number;
-  box_height: number;
-  box_left_margin: number;
-  box_top_margin: number;
-};
+import type { FaceCanvasProps } from "../_components/ui/face-canvas/face-canvas.component";
 
 export async function mountCanvas({
-  id,
   canvasId,
   image_url,
   box_width,

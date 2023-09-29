@@ -1,26 +1,12 @@
+import { Fragment, PropsWithChildren } from "react";
+
 import Navbar from "./_components/ui/navbar/navbar.component";
-import "../globals.css";
-import { Inter } from "next/font/google";
 
-const inter = Inter({
-  weight: "800",
-  subsets: ["latin"],
-});
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function NavLayout({ children }: PropsWithChildren) {
   return (
-    <div
-      className={inter.className}
-      style={{
-        height: "100%",
-      }}
-    >
+    <Fragment>
       <Navbar />
       {children}
-    </div>
+    </Fragment>
   );
 }

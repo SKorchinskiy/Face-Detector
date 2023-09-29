@@ -1,0 +1,40 @@
+.detection-container__main {
+  display: flex;
+  width: 100%;
+}
+
+.detection-list-container {
+  width: 100%;
+  display: grid;
+  overflow: clip;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.detection-image-container {
+  display: flex;
+  position: relative;
+}
+
+.detection-details {
+  width: 80%;
+  margin: 10;
+  display: flex;
+  justify-content: space-between;
+}
+
+.tag-list-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.face-box-list {
+  position: absolute;
+  top: 0;
+}
+
+.canvas-list {
+  margin-left: 30px;
+  background: #f8f4ea;
+  overflow: scroll;
+  border: 1px solid black;
+}

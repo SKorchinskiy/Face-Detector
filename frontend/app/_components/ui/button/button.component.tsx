@@ -1,31 +1,41 @@
-import { MouseEventHandler, PropsWithChildren } from "react";
-import style from "./button.module.css";
+import styles from "./button.module.css";
 import { Inter } from "next/font/google";
+
+import { MouseEventHandler, PropsWithChildren } from "react";
 
 const inter = Inter({
   weight: "800",
   subsets: ["latin"],
 });
 
-export type ButtonProps = {
-  clickHandler?: MouseEventHandler<HTMLButtonElement>;
-  btnType?: "submit" | "button";
-  className?: string;
-  disabled?: boolean;
-} & PropsWithChildren;
+export type ButtonProps = Partial<{
+  btnType: "submit" | "button";
+  className: string;
+  disabled: boolean;
+  clickHandler: MouseEventHandler<HTMLButtonElement>;
+}> &
+  PropsWithChildren;
+
+const defaultProps: ButtonProps = {
+  children: <></>,
+  btnType: "button",
+  className: "",
+  disabled: false,
+  clickHandler: (e) => {},
+};
 
 export default function Button({
   children,
-  btnType = "button",
-  className = "",
-  disabled = false,
+  btnType,
+  className,
+  disabled,
   clickHandler,
-}: ButtonProps) {
+} = defaultProps) {
   return (
     <button
       type={btnType}
-      className={`${style[className]} ${inter.className} ${
-        disabled ? style["disabled"] : ""
+      className={`${className ? styles[className] : ""} ${inter.className} ${
+        disabled ? styles["disabled"] : ""
       } `}
       onClick={clickHandler}
       disabled={disabled}

@@ -1,3 +1,5 @@
+"use client";
+
 import type {
   ImageMetaData,
   DetectedFace,
@@ -6,16 +8,12 @@ import FaceCanvas from "../face-canvas/face-canvas.component";
 import { getPixelBorderValues } from "../../../_utils/image.utils";
 
 type FaceCanvasListProps = {
-  imageMetaData: ImageMetaData;
+  imagesMetaData: ImageMetaData[];
 };
 
-export default function FaceCanvasList({ imageMetaData }: FaceCanvasListProps) {
-  return (
-    <div
-      style={{
-        padding: "10px",
-      }}
-    >
+function FaceCanvasList({ imagesMetaData }: FaceCanvasListProps) {
+  return imagesMetaData.map((imageMetaData, image_index) => (
+    <div key={image_index} style={{ padding: "10px" }}>
       <p>Faces detected: {imageMetaData.face_count}</p>
       <div
         style={{
@@ -24,21 +22,19 @@ export default function FaceCanvasList({ imageMetaData }: FaceCanvasListProps) {
         }}
       >
         {imageMetaData.detected_faces.map(
-          ({ bounding_box, probability }: DetectedFace, index) => {
+          ({ bounding_box, probability }: DetectedFace, box_index) => {
             const { width, height, marginLeft, marginTop } =
               getPixelBorderValues(bounding_box, imageMetaData);
+
             return (
-              <div
-                key={index}
-                style={{
-                  display: "flex",
-                }}
-              >
+              <div key={box_index} style={{ display: "flex" }}>
                 <FaceCanvas
-                  id={index}
+                  id={box_index}
+                  canvasId={Math.round(Math.random() * 100)}
                   image_url={imageMetaData.url}
                   box_width={width}
                   box_height={height}
+                  probability={probability}
                   box_left_margin={marginLeft}
                   box_top_margin={marginTop}
                 />
@@ -49,8 +45,11 @@ export default function FaceCanvasList({ imageMetaData }: FaceCanvasListProps) {
                     justifyContent: "center",
                   }}
                 >
-                  <span>Face №: {index + 1}</span>
-                  <p>probability: {Math.round(probability * 100)}%</p>
+                  <span>Face №: {box_index + 1}</span>
+                  <p>
+                    probability:{" "}
+                    {probability ? Math.round(probability * 100) : "unknown"}%
+                  </p>
                 </div>
               </div>
             );
@@ -58,5 +57,7 @@ export default function FaceCanvasList({ imageMetaData }: FaceCanvasListProps) {
         )}
       </div>
     </div>
-  );
+  ));
 }
+
+export default FaceCanvasList;

@@ -1,5 +1,6 @@
 "use client";
 
+import styles from "./nav-tag.module.css";
 import { useRouter } from "next/navigation";
 
 export type TagElement = {
@@ -16,31 +17,10 @@ export default function NavTag({ tag }: TagProps) {
   return (
     <div
       id={`tag-name-${tag.tag_name}`}
-      style={{
-        margin: 10,
-        width: "150px",
-        height: "20px",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        cursor: "pointer",
-      }}
+      className={styles["nav-tag-container"]}
       onClick={(e) => router.push(`/images?tags=${tag.tag_name}`)}
     >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          fontSize: 13,
-          color: "white",
-          background: "#726A95",
-          width: "150px",
-          height: "20px",
-          borderRadius: "5px",
-          boxShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)",
-        }}
-      >
+      <div className={styles["nav-tag-container__item"]}>
         <p>{tag.tag_name}</p>
       </div>
     </div>

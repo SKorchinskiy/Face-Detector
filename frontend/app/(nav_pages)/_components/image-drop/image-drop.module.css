@@ -1,29 +1,42 @@
-.nav-buttons-container {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.image-drop-container {
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 20px;
-  cursor: pointer;
-  border: 1px dashed black;
+.image-drop {
   width: 100%;
   height: 100%;
+  color: white;
+  margin: 20px;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px dashed black;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.image-drop__body {
+  display: flex;
+  position: absolute;
+  align-items: center;
+  flex-direction: column;
+}
+
+.drag-enter {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.image-drop-element {
+  background: rgba(179, 92, 0);
+  padding: 10px;
+  border-radius: 10px;
+  margin: 16px;
 }
 
 .loading-effect {
-  position: absolute;
   top: 0;
   left: 0;
   zindex: 10;
   width: 100%;
   height: 100%;
+  position: absolute;
   background: rgba(0, 0, 0, 0.3);
 }
 

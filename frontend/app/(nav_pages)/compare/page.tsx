@@ -1,186 +1,96 @@
 "use client";
 
-import Uploader from "../_components/ui/uploader/uploader.component";
+import styles from "./page.module.css";
 import { fetchData } from "../_utils/fetch.util";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { ImageMetaData } from "../images/(image)/[id]/page";
 import FaceCanvasList from "../_components/ui/face-canvas-list/face-canvas-list.component";
-import { mountCanvas } from "../_utils/canvas.util";
-import { getPixelBorderValues } from "../_utils/image.utils";
-import Button from "../../_components/ui/button/button.component";
+import { compareImages, getDetectedImageId } from "../_utils/image.utils";
 import Detection from "../_components/ui/detection/detection.component";
-import FaceBox from "../_components/ui/face-box/face-box.component";
+import ImageDrop from "../_components/image-drop/image-drop.component";
+import { convertFileToBuffer } from "../_utils/converter.util";
 
-const initialState = { detection: undefined };
+const initialState = { detection: null };
 
 export default function Compare() {
   const [firstImage, setFirstImage] = useState<{
-    detection: ImageMetaData | undefined;
+    detection: ImageMetaData | null;
   }>(initialState);
   const [secondImage, setSecondImage] = useState<{
-    detection: ImageMetaData | undefined;
+    detection: ImageMetaData | null;
   }>(initialState);
-  const [similarity, setSimilarity] = useState<number | undefined>();
+  const [similarity, setSimilarity] = useState<number>();
 
   useEffect(() => {
-    const perform = async () => {
+    const compare = async () => {
       if (firstImage.detection?.url && secondImage.detection?.url) {
-        const firstPixelBorder = getPixelBorderValues(
-          firstImage.detection.detected_faces.map(
-            ({ bounding_box }) => bounding_box
-          )[0],
-          firstImage.detection
-        );
-        const secondPixelBorder = getPixelBorderValues(
-          secondImage.detection.detected_faces.map(
-            ({ bounding_box }) => bounding_box
-          )[0],
+        const similarityRate = await compareImages(
+          firstImage.detection,
           secondImage.detection
         );
-        const firstFaceBuffer = (await mountCanvas({
-          id: 1,
-          canvasId: Math.round(Math.random()).toString(),
-          image_url: firstImage.detection.url,
-          box_width: firstPixelBorder.width,
-          box_height: firstPixelBorder.height,
-          box_left_margin: firstPixelBorder.marginLeft,
-          box_top_margin: firstPixelBorder.marginTop,
-        })) as string;
-        const secondFaceBuffer = (await mountCanvas({
-          id: 1,
-          canvasId: Math.round(Math.random()).toString(),
-          image_url: secondImage.detection.url,
-          box_width: secondPixelBorder.width,
-          box_height: secondPixelBorder.height,
-          box_left_margin: secondPixelBorder.marginLeft,
-          box_top_margin: secondPixelBorder.marginTop,
-        })) as string;
-        const comparisonResult = await fetchData({
-          url: "http://localhost:8000/compare",
-          options: {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              images: [
-                { base64: firstFaceBuffer },
-                { base64: secondFaceBuffer },
-              ],
-            }),
-          },
-        });
-        setSimilarity(comparisonResult);
+        setSimilarity(similarityRate);
       }
     };
 
-    perform();
+    compare();
   }, [firstImage, secondImage]);
 
-  const uploadFirst = async (id: string | number) => {
-    const detection: ImageMetaData = await fetchData({
-      url: `http://localhost:8000/images/${id}`,
-    });
-    setFirstImage({ detection });
-  };
-
-  const uploadSecond = async (id: string | number) => {
-    const detection: ImageMetaData = await fetchData({
-      url: `http://localhost:8000/images/${id}`,
-    });
-    setSecondImage({ detection });
-  };
+  const uploadImage =
+    ({ isFirstImage }: { isFirstImage: boolean }) =>
+    async (file: File) => {
+      const base64 = await convertFileToBuffer(file);
+      const id = await getDetectedImageId({ base64 });
+      const detection: ImageMetaData = await fetchData({
+        url: `http://localhost:8000/images/${id}`,
+      });
+      isFirstImage
+        ? setFirstImage({ detection })
+        : setSecondImage({ detection });
+    };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        width: "100%",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          width: "100%",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-around",
-            alignItems: "center",
-            padding: "30px",
-            width: "80%",
-            height: "300px",
-          }}
-        >
-          <div>
-            {firstImage.detection?.url ? (
-              <>
-                <Detection detection={firstImage.detection} />
-              </>
-            ) : (
-              <Uploader processUpload={uploadFirst} />
-            )}
-          </div>
-          {similarity !== undefined ? (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <p>Similarity is</p>
-              <p>{similarity}%</p>
-            </div>
+    <div className={styles["comparison"]}>
+      <div className={styles["comparison__images-upload"]}>
+        <div className={styles["comparison__image-container"]}>
+          {firstImage.detection?.url ? (
+            <>
+              <Detection detection={firstImage.detection} />
+            </>
           ) : (
-            ""
+            <ImageDrop
+              imageUploadHandler={uploadImage({ isFirstImage: true })}
+            />
           )}
-          <div>
-            {secondImage.detection?.url ? (
-              <Detection detection={secondImage.detection} />
-            ) : (
-              <Uploader processUpload={uploadSecond} />
-            )}
+        </div>
+        {Number.isInteger(similarity) ? (
+          <div className={styles["comparison__result-container"]}>
+            <p>Similarity is</p>
+            <p>{similarity}%</p>
           </div>
+        ) : (
+          ""
+        )}
+        <div className={styles["comparison__image-container"]}>
+          {secondImage.detection?.url ? (
+            <Detection detection={secondImage.detection} />
+          ) : (
+            <ImageDrop
+              imageUploadHandler={uploadImage({ isFirstImage: false })}
+            />
+          )}
         </div>
       </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          width: "80%",
-          marginLeft: "300px",
-        }}
-      >
-        <div>
-          {firstImage.detection ? (
-            <FaceCanvasList imageMetaData={firstImage.detection} />
-          ) : (
-            ""
-          )}
-        </div>
-        <div>
-          {secondImage.detection ? (
-            <FaceCanvasList imageMetaData={secondImage.detection} />
+      <div className={styles["comparison__details"]}>
+        <div style={{ display: "flex" }}>
+          {firstImage.detection && secondImage.detection ? (
+            <FaceCanvasList
+              imagesMetaData={[firstImage.detection, secondImage.detection]}
+            />
           ) : (
             ""
           )}
         </div>
       </div>
-      {/* <div
-        style={{
-          position: "absolute",
-          bottom: "10px",
-        }}
-      >
-        <Button className="btn-container">Compare</Button>
-      </div> */}
     </div>
   );
 }

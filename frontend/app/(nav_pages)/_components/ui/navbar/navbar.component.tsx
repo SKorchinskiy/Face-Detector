@@ -1,82 +1,32 @@
+import styles from "./navbar.module.css";
 import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        position: "sticky",
-        top: 0,
-        zIndex: 1000,
-        background: "rgba(60, 64, 72, 0.8)",
-        height: "50px",
-        color: "white",
-        textTransform: "uppercase",
-      }}
-    >
-      <div
-        style={{
-          width: "50%",
-          marginLeft: "50px",
-        }}
-      >
-        <Link href={"/"} style={{ color: "white", textDecoration: "none" }}>
+    <div className={styles["navbar-container"]}>
+      <div className={styles["navbar-container__left"]}>
+        <Link href={"/"} className={styles.link}>
           <span>Face Detector</span>
         </Link>
       </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-around",
-          width: "50%",
-        }}
-      >
-        <Link
-          href={"/detect"}
-          style={{
-            color: "white",
-            textDecoration: "none",
-            width: "fit-content",
-          }}
-        >
+      <div className={styles["navbar-container__center"]}>
+        <Link href={"/detect"} className={styles.link}>
           <span>Detect</span>
         </Link>
-        <Link
-          href={"/compare"}
-          style={{
-            color: "white",
-            textDecoration: "none",
-            width: "fit-content",
-          }}
-        >
+        <Link href={"/compare"} className={styles.link}>
           <span>Compare</span>
         </Link>
-        <Link
-          href={"/images"}
-          style={{ color: "white", textDecoration: "none" }}
-        >
+        <Link href={"/images"} className={styles.link}>
           <span>Images</span>
         </Link>
       </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          marginRight: "50px",
-          width: "50%",
-        }}
-      >
-        <div
-          style={{
-            width: "50%",
-            display: "flex",
-            justifyContent: "space-around",
-          }}
-        >
-          <span>Sign In</span>
-          <span>Sign Up</span>
-        </div>
+      <div className={styles["navbar-container__right"]}>
+        <Link href={"#"} className={styles.link}>
+          Sign In
+        </Link>
+        <Link href={"#"} className={styles.link}>
+          Sign Up
+        </Link>
       </div>
     </div>
   );

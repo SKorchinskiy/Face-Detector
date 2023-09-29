@@ -1,21 +1,28 @@
 "use client";
 
-import { FaceCanvasProps, mountCanvas } from "../../../_utils/canvas.util";
-import { useEffect, useRef, useState } from "react";
+import { mountCanvas } from "../../../_utils/canvas.util";
+import { useEffect, useRef } from "react";
 
-export default function FaceCanvas(props: Omit<FaceCanvasProps, "canvasId">) {
-  const canvasId = useRef(Math.round(Math.random() * 1000).toString());
+export type FaceCanvasProps = {
+  id: number;
+  probability?: number;
+  canvasId: string | number;
+  image_url: string;
+  box_width: number;
+  box_height: number;
+  box_left_margin: number;
+  box_top_margin: number;
+};
+
+export default function FaceCanvas(props: FaceCanvasProps) {
+  const canvasId = useRef(props.canvasId.toString());
 
   useEffect(() => {
     mountCanvas({ ...props, canvasId: canvasId.current });
   }, [props]);
+
   return (
-    <div
-      style={{
-        height: 100,
-        margin: 10,
-      }}
-    >
+    <div style={{ height: 100, margin: 10 }}>
       <canvas
         id={`face-canvas-${canvasId.current}`}
         style={{ height: "100%" }}

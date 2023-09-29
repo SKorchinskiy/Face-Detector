@@ -11,7 +11,6 @@ import DetectionList from "../_components/ui/detection-list/detection-list.compo
 import PaginationBar from "./_components/pagination-bar/pagination-bar.component";
 import React, {
   MouseEvent,
-  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -42,35 +41,16 @@ const DEFAULT_RECENT_DETECTIONS: RecentDetections = {
 };
 
 export default function Imges() {
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [tags, setTags] = useState<Tag[]>([]);
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { applyTags, cancelUpdate } = useContext(TagsContext);
   const [detections, setDetections] = useState<RecentDetections>(
     DEFAULT_RECENT_DETECTIONS
   );
-  const [tags, setTags] = useState<Tag[]>([]);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const sidebarRef = useRef<HTMLDivElement>(null);
-  const { selectedTags, applyTags, cancelUpdate } = useContext(TagsContext);
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const parsePageOrReturnDefault = (page: string | null) => {
-    if (!page || !Number.isInteger(Number(page))) return 1;
-    const parsedPage = Number(page);
-    return parsedPage > 0 ? parsedPage : 1;
-  };
-
-  const onClickHandler = (event: MouseEvent<HTMLDivElement>) => {
-    const target = event.target as HTMLElement;
-    if (
-      isSidebarOpen &&
-      sidebarRef.current &&
-      !target.contains(sidebarRef.current) &&
-      !(sidebarRef.current as HTMLElement).contains(target)
-    ) {
-      cancelTagsHandler();
-      setIsSidebarOpen(false);
-    }
-  };
 
   useEffect(() => {
     const getTags = async () => {
@@ -98,12 +78,32 @@ export default function Imges() {
     fetchImages();
   }, [searchParams]);
 
+  const parsePageOrReturnDefault = (page: string | null) => {
+    if (!page || !Number.isInteger(Number(page))) return 1;
+    const parsedPage = Number(page);
+    return parsedPage > 0 ? parsedPage : 1;
+  };
+
+  const onClickHandler = (event: MouseEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLElement;
+    if (
+      isSidebarOpen &&
+      sidebarRef.current &&
+      !target.contains(sidebarRef.current) &&
+      !(sidebarRef.current as HTMLElement).contains(target)
+    ) {
+      cancelTagsHandler();
+      setIsSidebarOpen(false);
+    }
+  };
+
   const applyTagsHandler = () => {
     const appliedTags = applyTags();
     const stringified = appliedTags.toString();
     const params = new URLSearchParams(searchParams);
     if (stringified) params.set("tags", stringified);
     else params.delete("tags");
+    params.set("page", "1");
     const query = decodeURIComponent(params.toString());
     router.push(pathname + "?" + query);
     setIsSidebarOpen(false);
@@ -115,34 +115,12 @@ export default function Imges() {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        position: "relative",
-        minHeight: "100%",
-      }}
-      onClick={onClickHandler}
-    >
+    <div className={styles["images-container"]} onClick={onClickHandler}>
       {isSidebarOpen ? (
         <>
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              bottom: 0,
-              right: 0,
-              background: "rgba(238, 238, 238, 0.4)",
-              zIndex: 20,
-            }}
-          ></div>
+          <div className={styles["overlapping-effect"]}></div>
           <Sidebar
-            sections={[
-              {
-                title: "tags",
-                elements: tags,
-              },
-            ]}
+            sections={[{ title: "tags", elements: tags }]}
             ref={sidebarRef}
             applyHandler={applyTagsHandler}
             cancelHandler={cancelTagsHandler}
@@ -150,32 +128,21 @@ export default function Imges() {
         </>
       ) : (
         <div
-          style={{
-            position: "absolute",
-            top: "40%",
-            left: 0,
-            zIndex: 30,
-            cursor: "pointer",
-          }}
+          className={styles["images-container__arrow"]}
           onClick={() => setIsSidebarOpen(true)}
         >
           <Image alt="toggle" src="/arrow-right.svg" width={50} height={50} />
         </div>
       )}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          width: "100%",
-        }}
-      >
+      <div className={styles["images-container__body"]}>
         <div className={styles["detections-container"]}>
           <div className={styles["detections-data"]}>
             <DetectionList detections={detections.recentDetections} />
           </div>
-          <div className={styles["page-pagination"]}>
-            <PaginationBar pagination={detections.pagination} />
+          <div style={{ width: "100%", height: "100px" }}>
+            <div className={styles["page-pagination"]}>
+              <PaginationBar pagination={detections.pagination} />
+            </div>
           </div>
         </div>
       </div>

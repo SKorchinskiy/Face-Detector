@@ -1,4 +1,15 @@
-import { BoundingBox, ImageMetaData } from "../images/(image)/[id]/page";
+import {
+  BoundingBox,
+  DetectedFace,
+  ImageMetaData,
+} from "../images/(image)/[id]/page";
+import { mountCanvas } from "./canvas.util";
+import { fetchData } from "./fetch.util";
+
+type ImageProvider = Partial<{
+  base64: Buffer;
+  url: string;
+}>;
 
 export function getPixelBorderValues(
   bounding_box: BoundingBox,
@@ -19,4 +30,81 @@ export function getPixelBorderValues(
     marginLeft,
     marginTop,
   };
+}
+
+export async function getDetectedImageId(data: ImageProvider) {
+  const id = await fetchData({
+    url: "http://localhost:8000/detect",
+    options: {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...data }),
+    },
+  });
+  return id;
+}
+
+export async function getSimilarityResult(
+  firstFaceBuffer: string,
+  secondFaceBuffer: string
+) {
+  return await fetchData({
+    url: "http://localhost:8000/compare",
+    options: {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        images: [{ base64: firstFaceBuffer }, { base64: secondFaceBuffer }],
+      }),
+    },
+  });
+}
+
+export function getBoundingBoxes(detected_faces: DetectedFace[]) {
+  return detected_faces.map(({ bounding_box }) => bounding_box)[0];
+}
+
+function canvasDataFormatter(data: any) {
+  return {
+    box_width: data.width,
+    box_height: data.height,
+    box_left_margin: data.marginLeft,
+    box_top_margin: data.marginTop,
+  };
+}
+
+export async function compareImages(
+  firstDetection: ImageMetaData,
+  secondDetection: ImageMetaData
+): Promise<number> {
+  const firstPixelBorder = getPixelBorderValues(
+    getBoundingBoxes(firstDetection.detected_faces),
+    firstDetection
+  );
+  const secondPixelBorder = getPixelBorderValues(
+    getBoundingBoxes(secondDetection.detected_faces),
+    secondDetection
+  );
+  const firstFaceBuffer = (await mountCanvas({
+    id: 1,
+    canvasId: Math.round(Math.random()).toString(),
+    image_url: firstDetection.url,
+    ...canvasDataFormatter(firstPixelBorder),
+  })) as string;
+  const secondFaceBuffer = (await mountCanvas({
+    id: 1,
+    canvasId: Math.round(Math.random()).toString(),
+    image_url: secondDetection.url,
+    ...canvasDataFormatter(secondPixelBorder),
+  })) as string;
+
+  const comparisonResult = await getSimilarityResult(
+    firstFaceBuffer,
+    secondFaceBuffer
+  );
+  return comparisonResult;
 }
