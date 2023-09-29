@@ -1,23 +1,21 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { createContext, useCallback, useEffect, useState } from "react";
+import { PropsWithChildren, createContext, useEffect, useState } from "react";
 
-export const TagsContext = createContext({
+const initialValue = {
   selectedTags: [] as string[],
-  toggleTag: (tag_name: string) => {},
+  toggleTag: (_: string) => {},
   applyTags: () => [] as string[],
   cancelUpdate: () => {},
-});
+};
 
-export default function TagsProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [updatedTags, setUpdatedTags] = useState<string[]>([]);
+export const TagsContext = createContext(initialValue);
+
+export default function TagsProvider({ children }: PropsWithChildren) {
   const searchParams = useSearchParams();
+  const [updatedTags, setUpdatedTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
@@ -36,9 +34,7 @@ export default function TagsProvider({
     setUpdatedTags((prevState) => {
       const isIncluded = prevState.includes(tag_name);
       if (!isIncluded) {
-        const newValues = [...prevState];
-        newValues.push(tag_name);
-        return newValues;
+        return [...prevState].concat([tag_name]);
       }
       return [...prevState].filter((name) => name !== tag_name);
     });
@@ -48,6 +44,7 @@ export default function TagsProvider({
     setSelectedTags(updatedTags);
     return updatedTags;
   };
+
   const cancelUpdate = () => setUpdatedTags(selectedTags);
 
   return (

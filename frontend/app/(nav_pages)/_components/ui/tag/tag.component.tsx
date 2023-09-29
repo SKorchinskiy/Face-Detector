@@ -1,5 +1,6 @@
 "use client";
 
+import styles from "./tag.module.css";
 import { TagsContext } from "../../../_context/tags.context";
 
 import { MouseEvent, useContext, useEffect, useState } from "react";
@@ -20,20 +21,12 @@ export default function Tag({ tag, onClick }: TagProps) {
   useEffect(() => {
     const isIncluded = selectedTags.includes(tag.tag_name);
     if (isIncluded) setIsSelected(isIncluded);
-  }, []);
+  }, [tag]);
 
   return (
     <div
       id={`tag-name-${tag.tag_name}`}
-      style={{
-        margin: 10,
-        width: "150px",
-        height: "20px",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        cursor: "pointer",
-      }}
+      className={styles["tag-container"]}
       onClick={(event) => {
         setIsSelected((prev) => !prev);
         toggleTag(tag.tag_name);
@@ -41,18 +34,8 @@ export default function Tag({ tag, onClick }: TagProps) {
       }}
     >
       <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          fontSize: 13,
-          color: "white",
-          background: isSelected ? "#352F44" : "#726A95",
-          width: "150px",
-          height: "20px",
-          borderRadius: "5px",
-          boxShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)",
-        }}
+        className={styles["tag-container__item"]}
+        style={{ background: isSelected ? "#352F44" : "#726A95" }}
       >
         <p>{tag.tag_name}</p>
       </div>
