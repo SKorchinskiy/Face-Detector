@@ -7,24 +7,27 @@ import ImageDrop from "../_components/image-drop/image-drop.component";
 import { fetchData } from "../_utils/fetch.util";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
+import NavButton from "../../_components/ui/nav-button/nav-button.component";
+import { convertFileToBuffer } from "../_utils/converter.util";
+import { getDetectedImageId } from "../_utils/image.utils";
 
 export default function Detect() {
-  const [imageUrl, setImageUrl] = useState("");
   const router = useRouter();
+  const [imageUrl, setImageUrl] = useState("");
   const urlFieldRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    function enterKeyListener(event: KeyboardEvent) {
+    async function enterKeyListener(event: KeyboardEvent) {
       if (event.key === "Enter") {
         if (!imageUrl) {
           urlFieldRef.current?.focus();
         } else {
-          processUrlDetection(imageUrl).then((id) => {
-            router.push(`/images/${id}`);
-          });
+          const id = await getDetectedImageId({ url: imageUrl });
+          router.push(`/images/${id}`);
         }
       }
     }
+
     window.addEventListener("keypress", enterKeyListener);
     return () => window.removeEventListener("keypress", enterKeyListener);
   }, [imageUrl, router]);
@@ -34,72 +37,35 @@ export default function Detect() {
     setImageUrl(value);
   };
 
-  const processUrlDetection = async (url: string) => {
-    const id = await fetchData({
-      url: "http://localhost:8000/detect",
-      options: {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ url }),
-      },
-    });
-    return id;
-  };
-
-  const processFaceDetection = async (file: any) => {
-    const data = await file.arrayBuffer();
-    const image = Buffer.from(data);
-    const id = await fetchData({
-      url: "http://localhost:8000/detect",
-      options: {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ base64: image }),
-      },
-    });
-    return id;
+  const imageUploadHandler = async (file: File) => {
+    const base64 = await convertFileToBuffer(file);
+    const id = await getDetectedImageId({ base64 });
+    router.push(`/images/${id}`);
   };
 
   return (
-    <div
-      style={{
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-      }}
-    >
+    <div className={styles["detection-container"]}>
       <h1 className={styles.headline}>Provide Image for Detection</h1>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          width: "100%",
-        }}
-      >
-        <Field
-          id="image-detector"
-          type="url"
-          placeholder="enter image url"
-          value={imageUrl}
-          className="image-detector"
-          onFieldChange={onUrlFieldChange}
-          ref={urlFieldRef}
-        />
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            width: "80%",
-          }}
-        >
-          <ImageDrop processUpload={processFaceDetection} />
+      <div className={styles["detection-container__body"]}>
+        <div className={styles["detection-container__image-providers"]}>
+          <Field
+            id="image-detector"
+            type="url"
+            placeholder="enter image url"
+            value={imageUrl}
+            className="image-detector"
+            onFieldChange={onUrlFieldChange}
+            ref={urlFieldRef}
+          />
+          <ImageDrop imageUploadHandler={imageUploadHandler} />
+        </div>
+        <div className={styles["nav-buttons-container"]}>
+          <NavButton className="back-and-forth" path="/">
+            Back
+          </NavButton>
+          <NavButton className="back-and-forth" disabled path="/image">
+            Detect
+          </NavButton>
         </div>
       </div>
     </div>
