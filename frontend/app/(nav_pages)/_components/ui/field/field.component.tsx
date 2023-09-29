@@ -1,8 +1,9 @@
 import styles from "./field.module.css";
+
 import {
+  ChangeEvent,
   ChangeEventHandler,
-  Fragment,
-  MutableRefObject,
+  ForwardedRef,
   forwardRef,
 } from "react";
 
@@ -15,25 +16,21 @@ type FieldProps = {
   onFieldChange: ChangeEventHandler<HTMLInputElement>;
 };
 
+const defaultProps: FieldProps = {
+  id: `input-${Math.round(Math.random() * 1e6)}`,
+  type: "text",
+  placeholder: "",
+  value: "",
+  className: "",
+  onFieldChange: (e: ChangeEvent<HTMLInputElement>) => {},
+};
+
 function Field(
-  {
-    id,
-    type = "text",
-    placeholder = "",
-    value = "",
-    className = "",
-    onFieldChange = () => {},
-  }: FieldProps,
-  ref: any
+  { id, type, placeholder, value, className, onFieldChange } = defaultProps,
+  ref: ForwardedRef<HTMLInputElement>
 ) {
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        width: "100%",
-      }}
-    >
+    <div className={styles["field-container"]}>
       <label htmlFor={id} />
       <input
         id={id}

@@ -1,3 +1,9 @@
+.field-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .form-field {
   text-align: center;
   border: 1px solid black;
@@ -8,7 +14,7 @@
 
 .image-detector {
   text-align: center;
-  width: 80%;
+  width: 100%;
   height: 50px;
   border: 1px solid black;
   border-radius: 10px;
