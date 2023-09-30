@@ -2,7 +2,7 @@
 
 import styles from "./sign-up-form.module.css";
 
-import Button from "../../../../_components/ui/button/button.component";
+import Button from "../../../../_components/button/button.component";
 import { useState } from "react";
 import Field from "../../../_components/ui/field/field.component";
 
