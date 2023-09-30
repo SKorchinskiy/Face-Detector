@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import NavButton from "../../../../_components/ui/nav-button/nav-button.component";
+import NavButton from "../../../../_components/nav-button/nav-button.component";
 import { useSearchParams } from "next/navigation";
 
 type BackwardPaginationProps = {
