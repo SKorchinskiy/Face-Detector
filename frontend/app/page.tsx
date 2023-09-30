@@ -1,7 +1,7 @@
 import styles from "./page.module.css";
 import { Fragment } from "react";
 import Image from "next/image";
-import NavButton from "./_components/ui/nav-button/nav-button.component";
+import NavButton from "./_components/nav-button/nav-button.component";
 
 export default function Home() {
   return (

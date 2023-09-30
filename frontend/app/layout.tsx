@@ -1,5 +1,5 @@
 import "./globals.css";
-import ParticlesBackground from "./_components/ui/particles/particles.component";
+import ParticlesBackground from "./_components/particles/particles.component";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import TagsProvider from "./(nav_pages)/_context/tags.context";

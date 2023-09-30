@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import BackwardPagination from "../backward-pagination/backward-pagination.component";
 import ForwardPagination from "../forward-pagination/forward-pagination.component";
-import NavButton from "../../../../_components/ui/nav-button/nav-button.component";
+import NavButton from "../../../../_components/nav-button/nav-button.component";
 import { useSearchParams } from "next/navigation";
 
 export type Pagination = {

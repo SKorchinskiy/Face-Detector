@@ -7,7 +7,7 @@ import ImageDrop from "../_components/image-drop/image-drop.component";
 import { fetchData } from "../_utils/fetch.util";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import NavButton from "../../_components/ui/nav-button/nav-button.component";
+import NavButton from "../../_components/nav-button/nav-button.component";
 import { convertFileToBuffer } from "../_utils/converter.util";
 import { getDetectedImageId } from "../_utils/image.utils";
 
