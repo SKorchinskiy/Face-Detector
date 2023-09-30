@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home page should render UI elements properly: Home Page Snapshot 1`] = `
+<div>
+  <div
+    class="faces-container"
+  >
+    <img
+      alt="face"
+      class="face-image rotate-left"
+      data-nimg="1"
+      decoding="async"
+      height="350"
+      loading="lazy"
+      src="/_next/image?url=%2Fface.png&w=750&q=75"
+      srcset="/_next/image?url=%2Fface.png&w=384&q=75 1x, /_next/image?url=%2Fface.png&w=750&q=75 2x"
+      style="color: transparent;"
+      width="350"
+    />
+    <img
+      alt="face"
+      class="face-image rotate-right"
+      data-nimg="1"
+      decoding="async"
+      height="350"
+      loading="lazy"
+      src="/_next/image?url=%2Fface.png&w=750&q=75"
+      srcset="/_next/image?url=%2Fface.png&w=384&q=75 1x, /_next/image?url=%2Fface.png&w=750&q=75 2x"
+      style="color: transparent;"
+      width="350"
+    />
+  </div>
+  <div
+    class="content-container"
+  >
+    <h1
+      class="content-container__headline"
+    >
+      Detect Faces Using Images
+    </h1>
+    <div
+      class="content-container__body"
+    >
+      <a
+        href="/detect"
+        style="text-decoration: none;"
+      >
+        <button
+          class="btn-container className  "
+        >
+          Try Now
+        </button>
+      </a>
+      <a
+        href="/auth"
+        style="text-decoration: none;"
+      >
+        <button
+          class="btn-container className  "
+        >
+          Sign Up
+        </button>
+      </a>
+    </div>
+    <div
+      class="content-container__footnote"
+    >
+      <h1
+        style="position: absolute; font-size: 20px; bottom: 20px;"
+      >
+        Over 1+ million users use Face Detector
+      </h1>
+    </div>
+  </div>
+</div>
+`;
