@@ -7,14 +7,14 @@ import {
   forwardRef,
 } from "react";
 
-type FieldProps = {
+type FieldProps = Partial<{
   id: string;
   type: string;
   placeholder: string;
   value: string;
   className: string;
   onFieldChange: ChangeEventHandler<HTMLInputElement>;
-};
+}>;
 
 const defaultProps: FieldProps = {
   id: `input-${Math.round(Math.random() * 1e6)}`,
@@ -37,7 +37,7 @@ function Field(
         type={type}
         placeholder={placeholder}
         value={value}
-        className={styles[className]}
+        className={className ? styles[className] : ""}
         onChange={onFieldChange}
         ref={ref}
       />
