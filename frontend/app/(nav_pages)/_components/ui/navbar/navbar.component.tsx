@@ -21,10 +21,10 @@ export default function Navbar() {
         </Link>
       </div>
       <div className={styles["navbar-container__right"]}>
-        <Link href={"#"} className={styles.link}>
+        <Link href={"/sign-in"} className={styles.link}>
           Sign In
         </Link>
-        <Link href={"#"} className={styles.link}>
+        <Link href={"/sign-up"} className={styles.link}>
           Sign Up
         </Link>
       </div>

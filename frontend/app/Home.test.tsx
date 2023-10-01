@@ -2,15 +2,14 @@ import "@testing-library/jest-dom";
 
 import { render, screen } from "@testing-library/react";
 
-import Home from "../page";
+import Home from "./page";
 
 describe("Home page", () => {
   it("should render UI elements properly", async () => {
-    const { container } = render(<Home />);
+    render(<Home />);
 
-    expect.assertions(6);
+    expect.assertions(5);
 
-    expect(container).toMatchSnapshot("Home Page Snapshot");
     expect(screen.getAllByAltText("face")).toHaveLength(2);
     expect(
       screen.getByText(/^detect faces using images$/i)

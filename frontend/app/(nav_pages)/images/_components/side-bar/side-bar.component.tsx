@@ -1,4 +1,4 @@
-import Button from "../../../../_components/ui/button/button.component";
+import Button from "../../../../_components/button/button.component";
 import TagList from "../../../_components/ui/tag-list/tag-list.component";
 import React, {
   ChangeEvent,

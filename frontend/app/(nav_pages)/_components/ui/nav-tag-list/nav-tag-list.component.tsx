@@ -5,7 +5,7 @@ import { MouseEvent, useState } from "react";
 import NavTag from "../nav-tag/nav-tag.component";
 import type { TagElement } from "../tag/tag.component";
 
-type TagListProps = {
+export type TagListProps = {
   tags: Array<TagElement>;
 };
 
@@ -23,15 +23,19 @@ export default function NavTagList({ tags }: TagListProps) {
           <NavTag key={index} tag={tag} />
         )
       )}
-      <span
-        style={{
-          textDecoration: "underline",
-          cursor: "pointer",
-        }}
-        onClick={toggleFilter}
-      >
-        show {filter ? "more" : "less"}...
-      </span>
+      {tags.length > 5 ? (
+        <span
+          style={{
+            textDecoration: "underline",
+            cursor: "pointer",
+          }}
+          onClick={toggleFilter}
+        >
+          show {filter ? "more" : "less"}...
+        </span>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
