@@ -16,19 +16,18 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import Sidebar from "./_components/side-bar/side-bar.component";
 import Image from "next/image";
 import { TagsContext } from "../_context/tags.context";
-import { useRouter } from "next/navigation";
 
-type RecentDetections = {
+export type RecentDetections = {
   recentDetections: ImageMetaData[];
 } & PaginationBarProps;
 
-type Tag = { count: number } & TagElement;
+export type Tag = { count: number } & TagElement;
 
-const DEFAULT_RECENT_DETECTIONS: RecentDetections = {
+export const DEFAULT_RECENT_DETECTIONS: RecentDetections = {
   recentDetections: [],
   pagination: {
     hasPrev: false,
@@ -40,7 +39,7 @@ const DEFAULT_RECENT_DETECTIONS: RecentDetections = {
   },
 };
 
-export default function Imges() {
+export default function Images() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -58,7 +57,6 @@ export default function Imges() {
       const topTags = await fetchData({ url });
       setTags(topTags);
     };
-
     getTags();
   }, []);
 
@@ -74,7 +72,6 @@ export default function Imges() {
         await fetchData({ url, options });
       setDetections({ recentDetections, pagination });
     };
-
     fetchImages();
   }, [searchParams]);
 

@@ -22,7 +22,7 @@ export default function FaceCanvas(props: FaceCanvasProps) {
   }, [props]);
 
   return (
-    <div style={{ height: 100, margin: 10 }}>
+    <div style={{ height: 100, width: 100, margin: 10 }}>
       <canvas
         id={`face-canvas-${canvasId.current}`}
         style={{ height: "100%" }}
