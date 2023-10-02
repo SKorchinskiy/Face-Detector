@@ -9,7 +9,7 @@ export async function mountCanvas({
   box_top_margin,
 }: FaceCanvasProps) {
   const image = new Image();
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     image.src = image_url;
     image.crossOrigin = "Anonymous";
 
@@ -20,7 +20,7 @@ export async function mountCanvas({
         ) as HTMLCanvasElement) || document.createElement("canvas");
       const context = canvas.getContext("2d");
 
-      if (!context) return;
+      if (!context) reject("The context is not available");
 
       canvas.setAttribute("width", `${box_width}`);
       canvas.setAttribute("height", `${box_height}`);
