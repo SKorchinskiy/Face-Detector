@@ -11,7 +11,6 @@ type ForwardPaginationProps = {
 
 export default function ForwardPagination({
   hasNext,
-  currentPage,
   nextPage,
   pages,
 }: ForwardPaginationProps) {
