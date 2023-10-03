@@ -1,3 +1,34 @@
+.detect-option,
+.detection-option_selected {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40px 0;
+  height: 100px;
+  width: 40%;
+  color: white;
+  border-radius: 5px;
+  box-shadow: 5px 5px 5px rgb(0, 0, 0, 0.7);
+  user-select: none;
+  cursor: pointer;
+  border: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.detect-option:hover {
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 2px 2px 5px rgb(0, 0, 0, 0.5);
+}
+
+.detect-option:active {
+  scale: 95%;
+}
+
+.detection-option_selected {
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 2px 2px 5px rgb(0, 0, 0, 0.5);
+}
+
 .btn-container,
 .btn-container-mini {
   display: flex;
