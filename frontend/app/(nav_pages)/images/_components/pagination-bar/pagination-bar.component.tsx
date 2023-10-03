@@ -1,5 +1,6 @@
 "use client";
 
+import styles from "./pagination-bar.module.css";
 import { useMemo } from "react";
 import BackwardPagination from "../backward-pagination/backward-pagination.component";
 import ForwardPagination from "../forward-pagination/forward-pagination.component";
@@ -24,14 +25,7 @@ export default function PaginationBar({ pagination }: PaginationBarProps) {
   const cachedTags = useMemo(() => searchParams.get("tags"), [searchParams]);
 
   return (
-    <div
-      style={{
-        width: "600px",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}
-    >
+    <div className={styles["pagination-bar"]}>
       <NavButton
         path={
           `images?page=${pagination.prevPage}` +

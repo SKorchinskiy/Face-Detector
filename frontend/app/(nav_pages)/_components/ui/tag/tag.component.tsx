@@ -21,7 +21,7 @@ export default function Tag({ tag, onClick }: TagProps) {
   useEffect(() => {
     const isIncluded = selectedTags.includes(tag.tag_name);
     if (isIncluded) setIsSelected(isIncluded);
-  }, [tag]);
+  }, [tag, selectedTags]);
 
   return (
     <div

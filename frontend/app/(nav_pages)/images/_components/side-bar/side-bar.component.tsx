@@ -1,3 +1,4 @@
+import styles from "./side-bar.module.css";
 import Button from "../../../../_components/button/button.component";
 import TagList from "../../../_components/ui/tag-list/tag-list.component";
 import React, {
@@ -49,72 +50,26 @@ function Sidebar(
   }, [search, sections]);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        position: "absolute",
-        color: "white",
-        width: "400px",
-        height: "90vh",
-        top: 0,
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "10px",
-        background: "rgba(238, 238, 238, 0.9)",
-        zIndex: 100,
-      }}
-      ref={ref}
-    >
+    <div className={styles["sidebar"]} ref={ref}>
       {filteredSections.map((section, index) => {
         return (
-          <div
-            key={index}
-            style={{
-              width: "400px",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-around",
-              }}
-            >
-              <h3 style={{ color: "black", letterSpacing: "1px" }}>
+          <div key={index} style={{ width: "400px" }}>
+            <div className={styles["sidebar__section"]}>
+              <h3 className={styles["sidebar__section_title"]}>
                 {section.title}
               </h3>
               <input
                 type="search"
                 placeholder="search a tag..."
                 onChange={onSearchChange}
-                style={{
-                  position: "relative",
-                  top: "2px",
-                  width: "80%",
-                  height: "30px",
-                  border: "none",
-                  borderRadius: "5px",
-                }}
+                className={styles["sidebar__search"]}
               ></input>
             </div>
             <hr />
-            <div
-              style={{
-                position: "relative",
-                height: "500px",
-                overflow: "scroll",
-              }}
-            >
+            <div className={styles["sidebar__taglist"]}>
               <TagList tags={section.elements} />
             </div>
-            <div
-              style={{
-                display: "flex",
-                marginTop: "10px",
-                width: "100%",
-                justifyContent: "space-around",
-              }}
-            >
+            <div className={styles["sidebar__buttons"]}>
               <Button
                 className="back-and-forth-mini"
                 clickHandler={cancelHandler}

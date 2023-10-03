@@ -1,5 +1,6 @@
 "use client";
 
+import styles from "./face-canvas.module.css";
 import { mountCanvas } from "../../../_utils/canvas.util";
 import { useEffect, useRef } from "react";
 
@@ -22,10 +23,10 @@ export default function FaceCanvas(props: FaceCanvasProps) {
   }, [props]);
 
   return (
-    <div style={{ height: 100, width: 100, margin: 10 }}>
+    <div className={styles["canvas-container"]}>
       <canvas
         id={`face-canvas-${canvasId.current}`}
-        style={{ height: "100%" }}
+        className={styles["canvas-container_item"]}
       ></canvas>
     </div>
   );

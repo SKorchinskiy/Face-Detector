@@ -1,0 +1,9 @@
+.canvas-container {
+  height: 100px;
+  width: 100px;
+  margin: 10px;
+}
+
+.canvas-container_item {
+  height: 100%;
+}

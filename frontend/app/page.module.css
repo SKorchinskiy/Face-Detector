@@ -62,6 +62,12 @@
   text-transform: uppercase;
 }
 
+.content-container__footnote-title {
+  position: absolute;
+  font-size: 20px;
+  bottom: 20px;
+}
+
 @keyframes shine {
   to {
     background-position: 200% center;
