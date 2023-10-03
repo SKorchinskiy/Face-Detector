@@ -35,13 +35,7 @@ export default function Home() {
           </NavButton>
         </div>
         <div className={styles["content-container__footnote"]}>
-          <h1
-            style={{
-              position: "absolute",
-              fontSize: "20px",
-              bottom: "20px",
-            }}
-          >
+          <h1 className={styles["content-container__footnote-title"]}>
             Over 1+ million users use Face Detector
           </h1>
         </div>
