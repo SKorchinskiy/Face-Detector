@@ -1,0 +1,18 @@
+.canvas-list {
+  padding: 10px;
+}
+
+.canvas-list__container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.canvas-list__container_item {
+  display: flex;
+}
+
+.canvas-list__container_details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
