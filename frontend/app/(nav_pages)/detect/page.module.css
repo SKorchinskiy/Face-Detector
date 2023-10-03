@@ -5,6 +5,12 @@
   justify-content: center;
 }
 
+.headline-container {
+  top: 100px;
+  width: 100%;
+  position: absolute;
+}
+
 .headline {
   text-align: center;
 
@@ -34,6 +40,8 @@
 }
 
 .nav-buttons-container {
+  position: absolute;
+  bottom: 20px;
   width: 80%;
   display: flex;
   justify-content: space-between;
