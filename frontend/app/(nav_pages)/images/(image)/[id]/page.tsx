@@ -65,7 +65,7 @@ export default async function ImageRecognition({
   });
 
   return (
-    <div style={{ padding: "30px" }}>
+    <div className={styles["detection-container"]}>
       <div className={styles["detection-container__main"]}>
         <div className={styles["detection-image-container"]}>
           <Image
@@ -101,7 +101,7 @@ export default async function ImageRecognition({
       <div className={styles["detection-details"]}>
         <DetectionDetails {...imageMetaData} />
       </div>
-      <div style={{ marginTop: "50px" }}>
+      <div className={styles["detection-list"]}>
         <h2>Similar detections</h2>
         <div className={styles["detection-list-container"]}>
           <DetectionList detections={recentDetections} />

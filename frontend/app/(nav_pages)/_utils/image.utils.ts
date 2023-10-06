@@ -1,3 +1,4 @@
+import { Similarity } from "../compare/page";
 import {
   BoundingBox,
   DetectedFace,
@@ -80,7 +81,7 @@ function canvasDataFormatter(data: any) {
 export async function compareImages(
   firstDetection: ImageMetaData,
   secondDetection: ImageMetaData
-): Promise<number> {
+): Promise<Similarity> {
   const firstPixelBorder = getPixelBorderValues(
     getBoundingBoxes(firstDetection.detected_faces),
     firstDetection
