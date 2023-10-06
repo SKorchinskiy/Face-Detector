@@ -9,6 +9,50 @@ import { compareImages, getDetectedImageId } from "../_utils/image.utils";
 import Detection from "../_components/ui/detection/detection.component";
 import ImageDrop from "../_components/image-drop/image-drop.component";
 import { convertFileToBuffer } from "../_utils/converter.util";
+import DescriptionList from "../_components/ui/description-list/description-list.component";
+
+export type SimilarityDetails = {
+  parameters: number;
+  identical: number;
+  strongly_related: number;
+  weakly_related: number;
+  unrelated: number;
+  neutral: number;
+  distance: number;
+};
+
+export type Similarity = {
+  similarity: number;
+  dissimilarity: number;
+  details: SimilarityDetails;
+};
+
+function formatComparisonData(
+  comparison: Similarity
+): Array<{ name: string; value: string }> {
+  const {
+    similarity,
+    dissimilarity,
+    details: {
+      parameters,
+      strongly_related,
+      distance,
+      neutral,
+      unrelated,
+      weakly_related,
+    },
+  } = comparison;
+  return [
+    { name: "Similarity", value: `${similarity}%` },
+    { name: "Dissimilarity", value: `${dissimilarity}%` },
+    { name: "Number of parameters", value: `${parameters}` },
+    { name: "Strongly related facial features", value: `${strongly_related}` },
+    { name: "Weakly related facial features", value: `${weakly_related}` },
+    { name: "Neutral facial features", value: `${neutral}` },
+    { name: "Unrelated facial features", value: `${unrelated}` },
+    { name: "Distance between face clusters", value: `${distance}` },
+  ];
+}
 
 const initialState = { detection: null };
 
@@ -19,7 +63,7 @@ export default function Compare() {
   const [secondImage, setSecondImage] = useState<{
     detection: ImageMetaData | null;
   }>(initialState);
-  const [similarity, setSimilarity] = useState<number>();
+  const [comparison, setComparison] = useState<Similarity>();
 
   useEffect(() => {
     const compare = async () => {
@@ -28,7 +72,7 @@ export default function Compare() {
           firstImage.detection,
           secondImage.detection
         );
-        setSimilarity(similarityRate);
+        setComparison(similarityRate);
       }
     };
 
@@ -62,14 +106,6 @@ export default function Compare() {
             />
           )}
         </div>
-        {Number.isInteger(similarity) ? (
-          <div className={styles["comparison__result-container"]}>
-            <p>Similarity is</p>
-            <p>{similarity}%</p>
-          </div>
-        ) : (
-          ""
-        )}
         <div className={styles["comparison__image-container"]}>
           {secondImage.detection?.url ? (
             <Detection detection={secondImage.detection} />
@@ -90,6 +126,15 @@ export default function Compare() {
             ""
           )}
         </div>
+      </div>
+      <div className={styles["comparison-result"]}>
+        {comparison ? (
+          <div className={styles["comparison-result__container"]}>
+            <DescriptionList list={formatComparisonData(comparison)} />
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

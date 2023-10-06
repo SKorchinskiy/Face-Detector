@@ -18,16 +18,21 @@
   width: 40%;
 }
 
-.comparison__result-container {
-  width: 20%;
+.comparison-result {
   display: flex;
-  align-items: center;
   flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.comparison-result__container {
+  width: 80%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
 }
 
 .comparison__details {
   width: 80%;
   display: flex;
-  margin-left: 300px;
-  justify-content: center;
+  justify-content: space-between;
 }
