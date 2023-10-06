@@ -1,0 +1,27 @@
+.description {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-width: 200px;
+  min-height: 100px;
+  padding: 10px;
+}
+
+.description__item,
+.description__item_left,
+.description__item_right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  padding: 5px;
+}
+
+.description__item_left {
+  background: #b1d0e0;
+  border-radius: 5px 0px 0px 5px;
+}
+
+.description__item_right {
+  background: #406882;
+  border-radius: 0px 5px 5px 0px;
+}
