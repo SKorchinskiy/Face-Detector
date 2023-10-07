@@ -16,14 +16,14 @@
 
   background: linear-gradient(
     to right,
-    #000 40%,
+    #66347f 40%,
     #833ab4 40%,
-    #000 60%,
+    #66347f 60%,
     #fcb045 80%
   );
   background-size: 200% auto;
 
-  color: #000;
+  color: #66347f;
   background-clip: text;
   text-fill-color: transparent;
   -webkit-background-clip: text;

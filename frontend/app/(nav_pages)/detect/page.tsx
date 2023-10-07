@@ -13,6 +13,11 @@ import OptionProvider, {
   OptionType,
 } from "./_components/option-provider/option-provider.component";
 
+type ImageInput = {
+  url: string;
+  base64: Buffer | null;
+};
+
 export default function Detect() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -21,38 +26,49 @@ export default function Detect() {
     [searchParams]
   );
   const [detectedImageId, setDetectedImageId] = useState();
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageInput, setImageInput] = useState<ImageInput>({
+    url: "",
+    base64: null,
+  });
   const urlFieldRef = useRef<HTMLInputElement>(null);
   const [selectedOption, setSelectedOption] = useState<OptionType>();
 
   useEffect(() => {
     async function enterKeyListener(event: KeyboardEvent) {
-      if (event.key === "Enter") {
-        if (!imageUrl) {
-          urlFieldRef.current?.focus();
-        } else {
-          const id = await getDetectedImageId({ url: imageUrl });
-          router.push(`/images/${id}`);
-        }
+      if (event.key === "Enter" && imageInput.url) {
+        urlFieldRef.current?.focus();
       }
     }
 
     window.addEventListener("keypress", enterKeyListener);
     return () => window.removeEventListener("keypress", enterKeyListener);
-  }, [imageUrl, router]);
+  }, [imageInput.url]);
+
+  useEffect(() => {
+    if (detectedImageId) router.push(`/images/${detectedImageId}`);
+  }, [detectedImageId, router]);
 
   const selectedOptionHandler = (optionType: OptionType) =>
     setSelectedOption(optionType);
 
   const onUrlFieldChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setImageUrl(value);
+    setImageInput((prev) => ({ ...prev, url: value }));
   };
 
   const imageUploadHandler = async (file: File) => {
     const base64 = await convertFileToBuffer(file);
-    const id = await getDetectedImageId({ base64 });
-    setDetectedImageId(id);
+    setImageInput((prev) => ({ ...prev, base64 }));
+  };
+
+  const imageDetectionHandler = async () => {
+    if (imageInput.url) {
+      const id = await getDetectedImageId({ url: imageInput.url });
+      setDetectedImageId(id);
+    } else if (imageInput.base64) {
+      const id = await getDetectedImageId({ base64: imageInput.base64 });
+      setDetectedImageId(id);
+    }
   };
 
   return (
@@ -70,12 +86,13 @@ export default function Detect() {
           </>
         ) : (
           <div className={styles["detection-container__image-providers"]}>
-            {urlParams.get("provider") === OptionType.URL.toLowerCase() ? (
+            {urlParams.get("provider")?.toLowerCase() ===
+            OptionType.URL.toLowerCase() ? (
               <Field
                 id="image-detector"
                 type="url"
                 placeholder="enter image url"
-                value={imageUrl}
+                value={imageInput.url}
                 className="image-detector"
                 onFieldChange={onUrlFieldChange}
                 ref={urlFieldRef}
@@ -88,7 +105,7 @@ export default function Detect() {
         <div className={styles["nav-buttons-container"]}>
           <NavButton
             className="back-and-forth"
-            path={!selectedOption ? "/" : "/detect"}
+            path={!urlParams.get("provider") ? "/" : "/detect"}
           >
             Back
           </NavButton>
@@ -103,8 +120,9 @@ export default function Detect() {
           ) : (
             <NavButton
               className="back-and-forth"
-              disabled={!detectedImageId}
-              path={`/images/${detectedImageId}`}
+              disabled={!imageInput.url && !imageInput.base64}
+              path={`#`}
+              clickHandler={imageDetectionHandler}
             >
               Detect
             </NavButton>
