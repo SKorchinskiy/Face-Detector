@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   margin: 40px 0;
-  height: 100px;
+  height: 300px;
   width: 40%;
   color: white;
   border-radius: 5px;
@@ -12,11 +12,11 @@
   user-select: none;
   cursor: pointer;
   border: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(74, 85, 162);
 }
 
 .detect-option:hover {
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(19, 32, 67, 0.6);
   box-shadow: 2px 2px 5px rgb(0, 0, 0, 0.5);
 }
 
@@ -25,7 +25,7 @@
 }
 
 .detection-option_selected {
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(19, 32, 67, 0.6);
   box-shadow: 2px 2px 5px rgb(0, 0, 0, 0.5);
 }
 
@@ -35,6 +35,7 @@
   justify-content: center;
   align-items: center;
   border-radius: 10px;
+  border: 0px;
   height: 100px;
   width: 300px;
   background: #000;
@@ -45,6 +46,11 @@
   transition-duration: 0.1s;
   font-size: 35px;
   text-transform: uppercase;
+}
+
+.btn-container-mini {
+  font-size: 20px;
+  width: 200px;
 }
 
 .back-and-forth,
