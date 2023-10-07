@@ -1,17 +1,21 @@
 .navbar-container {
   top: 0;
-  color: white;
-  height: 50px;
+  color: black;
+  height: 60px;
   z-index: 1000;
   display: flex;
   position: sticky;
   align-items: center;
   text-transform: uppercase;
-  background: rgba(60, 64, 72, 0.8);
+  background: #232d3f;
+  /* border-bottom: 1px solid rgba(0, 0, 0, 0.1); */
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 0px 0px 50px 50px;
 }
 
 .navbar-container__left {
   display: flex;
+  justify-content: center;
   padding: 50px;
   width: 25%;
 }
@@ -27,11 +31,17 @@
 .navbar-container__right {
   display: flex;
   justify-content: space-around;
-  padding-left: 50px;
+  padding: 50px;
   width: 25%;
 }
 
 .link {
-  color: white;
+  font-size: 18px;
+  text-shadow: #000 2px 1px 10px;
+  color: rgb(255, 255, 255);
   text-decoration: none;
+}
+
+.link:hover {
+  color: rgb(150, 150, 150);
 }

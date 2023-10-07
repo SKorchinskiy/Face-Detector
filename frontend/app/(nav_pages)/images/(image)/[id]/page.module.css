@@ -11,6 +11,7 @@
 
 .detection-container__main {
   display: flex;
+  justify-content: space-between;
   width: 100%;
 }
 
@@ -24,6 +25,7 @@
 .detection-image-container {
   display: flex;
   position: relative;
+  padding: 10px;
 }
 
 .detection-details {
@@ -44,7 +46,8 @@
 }
 
 .canvas-list {
-  margin-left: 30px;
+  margin: 10px;
+  box-sizing: border-box;
   background: #f8f4ea;
   overflow: scroll;
   border: 1px solid black;
