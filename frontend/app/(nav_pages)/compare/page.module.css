@@ -5,6 +5,31 @@
   flex-direction: column;
 }
 
+.comparison__info {
+  width: 80%;
+  display: flex;
+  justify-content: space-around;
+  background: #f6f4eb;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 0px 0px 30px 30px;
+}
+
+.comparison__info_item {
+  width: 40%;
+  text-align: justify;
+}
+
+.comparison__action-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 50%;
+  width: 80%;
+  margin: 10px;
+}
+
 .comparison__images-upload {
   width: 80%;
   padding: 30px;
