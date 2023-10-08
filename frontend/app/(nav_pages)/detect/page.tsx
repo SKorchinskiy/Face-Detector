@@ -12,6 +12,7 @@ import { getDetectedImageId } from "../_utils/image.utils";
 import OptionProvider, {
   OptionType,
 } from "./_components/option-provider/option-provider.component";
+import { MagnifyingGlass } from "react-loader-spinner";
 
 type ImageInput = {
   url: string;
@@ -32,6 +33,7 @@ export default function Detect() {
   });
   const urlFieldRef = useRef<HTMLInputElement>(null);
   const [selectedOption, setSelectedOption] = useState<OptionType>();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function enterKeyListener(event: KeyboardEvent) {
@@ -62,6 +64,7 @@ export default function Detect() {
   };
 
   const imageDetectionHandler = async () => {
+    setIsLoading(true);
     if (imageInput.url) {
       const id = await getDetectedImageId({ url: imageInput.url });
       setDetectedImageId(id);
@@ -73,6 +76,20 @@ export default function Detect() {
 
   return (
     <div className={styles["detection-container"]}>
+      {isLoading && (
+        <div className={styles["loader"]}>
+          <MagnifyingGlass
+            visible={true}
+            height="80"
+            width="80"
+            ariaLabel="MagnifyingGlass-loading"
+            wrapperStyle={{}}
+            wrapperClass="MagnifyingGlass-wrapper"
+            glassColor="#c0efff"
+            color="#e15b64"
+          />
+        </div>
+      )}
       <div className={styles["headline-container"]}>
         <h1 className={styles.headline}>Provide Image for Detection</h1>
       </div>

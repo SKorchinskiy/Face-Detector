@@ -2,7 +2,7 @@
 
 import styles from "./page.module.css";
 import { fetchData } from "../_utils/fetch.util";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ImageMetaData } from "../images/(image)/[id]/page";
 import { compareImages, getDetectedImageId } from "../_utils/image.utils";
 import Detection from "../_components/ui/detection/detection.component";
@@ -10,6 +10,7 @@ import ImageDrop from "../_components/image-drop/image-drop.component";
 import { convertFileToBuffer } from "../_utils/converter.util";
 import DescriptionList from "../_components/ui/description-list/description-list.component";
 import Button from "../../_components/button/button.component";
+import { MagnifyingGlass } from "react-loader-spinner";
 
 export type SimilarityDetails = {
   parameters: number;
@@ -64,6 +65,7 @@ export default function Compare() {
     detection: ImageMetaData | null;
   }>(initialState);
   const [comparison, setComparison] = useState<Similarity | null>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const uploadImage =
     ({ isFirstImage }: { isFirstImage: boolean }) =>
@@ -78,8 +80,14 @@ export default function Compare() {
         : setSecondImage({ detection });
     };
 
+  useEffect(() => {
+    console.log(comparison);
+    if (comparison) setIsLoading(false);
+  }, [comparison]);
+
   const compareImagesHandler = async () => {
     if (firstImage.detection?.url && secondImage.detection?.url) {
+      setIsLoading(true);
       const similarityRate = await compareImages(
         firstImage.detection,
         secondImage.detection
@@ -155,12 +163,25 @@ export default function Compare() {
         </div>
       </div>
       <div className={styles["comparison-result"]}>
-        {comparison ? (
+        {isLoading ? (
+          <div className={styles["loader"]}>
+            <MagnifyingGlass
+              visible={true}
+              height="80"
+              width="80"
+              ariaLabel="MagnifyingGlass-loading"
+              wrapperStyle={{}}
+              wrapperClass="MagnifyingGlass-wrapper"
+              glassColor="#c0efff"
+              color="#e15b64"
+            />
+          </div>
+        ) : comparison ? (
           <div className={styles["comparison-result__container"]}>
             <DescriptionList list={formatComparisonData(comparison)} />
           </div>
         ) : (
-          ""
+          <></>
         )}
       </div>
     </div>

@@ -29,7 +29,8 @@
     ".next/types/**/*.ts",
     "app/page.test.js",
     "app/Home.test.tsx",
-    "app/(nav_pages)/_components/ui/description-list"
+    "app/(nav_pages)/_components/ui/description-list",
+    "app/(nav_pages)/images/loading.js"
   ],
   "exclude": ["node_modules"]
 }
