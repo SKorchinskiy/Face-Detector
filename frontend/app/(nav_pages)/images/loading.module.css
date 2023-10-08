@@ -1,0 +1,35 @@
+.loading {
+  display: flex;
+  justify-content: center;
+  width: 100wh;
+  height: 100%;
+  padding: 40px;
+}
+
+.loading__container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  column-gap: 10px;
+  row-gap: 5px;
+  overflow: clip;
+  max-width: 100%;
+  height: fit-content;
+  padding: 3px;
+}
+
+.loading__container_item {
+  width: 275px;
+  height: 250px;
+  background: rgb(200, 200, 200);
+  border-radius: 10px;
+  animation: loadingProcess 1s linear 0s infinite alternate;
+}
+
+@keyframes loadingProcess {
+  0% {
+    background: rgb(200, 200, 200);
+  }
+  100% {
+    background: rgb(165, 165, 165);
+  }
+}
