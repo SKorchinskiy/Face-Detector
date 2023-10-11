@@ -31,7 +31,7 @@ export default function Home() {
             Try Now
           </NavButton>
           <NavButton className="btn-container" path="/auth">
-            Sign Up
+            Sign In
           </NavButton>
         </div>
         <div className={styles["content-container__footnote"]}>

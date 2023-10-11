@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import TagsProvider from "./(nav_pages)/_context/tags.context";
 import { PropsWithChildren } from "react";
 import dynamic from "next/dynamic";
+import UserProvider from "./_context/user.context";
 
 const inter = Inter({
   weight: "800",
@@ -23,7 +24,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <TagsProvider>{children}</TagsProvider>
+        <UserProvider>
+          <TagsProvider>{children}</TagsProvider>
+        </UserProvider>
         <DynamicParticles />
       </body>
     </html>
