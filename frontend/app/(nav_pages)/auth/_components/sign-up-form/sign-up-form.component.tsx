@@ -1,69 +1,68 @@
 "use client";
 
-import styles from "./sign-up-form.module.css";
-
+import { ChangeEvent, MouseEvent, useState } from "react";
 import Button from "../../../../_components/button/button.component";
-import { useState } from "react";
-import Field from "../../../_components/ui/field/field.component";
+import FieldComponent from "../../../_components/ui/field/field.component";
+import { Field } from "../../page";
 
-const initialState = {
-  name: "",
-  email: "",
-  password: "",
+type SignUpFormProps = {
+  authHandler: Function;
 };
 
-export default function SignUpForm() {
-  const [formFields, setFormFields] = useState(initialState);
+const initialState: Field = {
+  name: "",
+  username: "",
+  password: "",
+  confirmPassword: "",
+};
 
-  const handleFormFieldChange = (event: any) => {
-    const value = event.target.value;
-    setFormFields({
-      ...formFields,
-      [event.target.id]: value,
-    });
+export default function SignUpForm({ authHandler }: SignUpFormProps) {
+  const [signUpInput, setSignUpInput] = useState<Field>(initialState);
+
+  const signUpHandler = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    authHandler(signUpInput);
   };
 
-  const handleSignUp = (event: any) => {
-    event.preventDefault();
-    fetch("http://localhost:8000/api/v1/sign-up", {
-      method: "post",
-      body: JSON.stringify(formFields),
-    });
+  const fieldUpdateHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const key = event.target.name;
+    const value = event.target.value;
+    setSignUpInput((prevInput) => ({ ...prevInput, [key]: value }));
   };
 
   return (
-    <form className={styles["form-container"]}>
-      <Field
-        id="name"
+    <>
+      <FieldComponent
         type="text"
-        placeholder="enter name"
-        value={formFields.name}
+        name="name"
         className="form-field"
-        onFieldChange={handleFormFieldChange}
+        placeholder="enter your name"
+        onFieldChange={fieldUpdateHandler}
       />
-      <Field
-        id="email"
+      <FieldComponent
         type="email"
-        placeholder="enter email"
-        value={formFields.email}
+        name="email"
         className="form-field"
-        onFieldChange={handleFormFieldChange}
+        placeholder="enter an email"
+        onFieldChange={fieldUpdateHandler}
       />
-      <Field
-        id="password"
+      <FieldComponent
         type="password"
-        placeholder="enter password"
-        value={formFields.password}
+        name="password"
         className="form-field"
-        onFieldChange={handleFormFieldChange}
+        placeholder="enter a password"
+        onFieldChange={fieldUpdateHandler}
       />
-      <Button
-        className="btn-container"
-        btnType="submit"
-        clickHandler={handleSignUp}
-      >
-        Sign Up
+      <FieldComponent
+        type="password"
+        name="confirmPassword"
+        className="form-field"
+        placeholder="confirm a password"
+        onFieldChange={fieldUpdateHandler}
+      />
+      <Button className="btn-container-mini" clickHandler={signUpHandler}>
+        <span>Sign Up</span>
       </Button>
-    </form>
+    </>
   );
 }
