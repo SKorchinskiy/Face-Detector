@@ -11,6 +11,7 @@ type FieldProps = Partial<{
   id: string;
   type: string;
   placeholder: string;
+  name: string;
   value: string;
   className: string;
   onFieldChange: ChangeEventHandler<HTMLInputElement>;
@@ -20,13 +21,22 @@ const defaultProps: FieldProps = {
   id: `input-${Math.round(Math.random() * 1e6)}`,
   type: "text",
   placeholder: "",
+  name: "",
   value: "",
   className: "",
   onFieldChange: (e: ChangeEvent<HTMLInputElement>) => {},
 };
 
 function Field(
-  { id, type, placeholder, value, className, onFieldChange } = defaultProps,
+  {
+    id,
+    type,
+    placeholder,
+    name,
+    value,
+    className,
+    onFieldChange,
+  } = defaultProps,
   ref: ForwardedRef<HTMLInputElement>
 ) {
   return (
@@ -35,6 +45,7 @@ function Field(
       <input
         id={id}
         type={type}
+        name={name}
         placeholder={placeholder}
         value={value}
         className={className ? styles[className] : ""}

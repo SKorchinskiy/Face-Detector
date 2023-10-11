@@ -1,7 +1,18 @@
+"use client";
+
+import { useContext, useEffect, useState } from "react";
 import styles from "./navbar.module.css";
 import Link from "next/link";
+import { UserContext } from "../../../../_context/user.context";
 
 export default function Navbar() {
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const userContext = useContext(UserContext);
+
+  useEffect(() => {
+    setIsSignedIn(userContext.isSignedIn);
+  }, [userContext]);
+
   return (
     <div className={styles["navbar-container"]}>
       <div className={styles["navbar-container__left"]}>
@@ -21,12 +32,19 @@ export default function Navbar() {
         </Link>
       </div>
       <div className={styles["navbar-container__right"]}>
-        <Link href={"/sign-in"} className={styles.link}>
-          Sign In
-        </Link>
-        <Link href={"/sign-up"} className={styles.link}>
-          Sign Up
-        </Link>
+        {isSignedIn ? (
+          <Link
+            href={"/auth"}
+            className={styles.link}
+            onClick={(e) => userContext.toggleAuthState()}
+          >
+            Sign Out
+          </Link>
+        ) : (
+          <Link href={"/auth"} className={styles.link}>
+            Sign In
+          </Link>
+        )}
       </div>
     </div>
   );
