@@ -1,8 +1,0 @@
-.form-container {
-  display: "flex";
-  flexdirection: "column";
-  aligncontent: "center";
-  justifycontent: "space-between";
-  height: "300px";
-  width: "300px";
-}
