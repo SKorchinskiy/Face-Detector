@@ -1,25 +1,22 @@
-const express = require("express");
 const {
   addTagsToDB,
   getImageFromDB,
-  getRecentDetections,
+  getRecentDetections: getDetections,
   getRecommendedDetections,
   getTopTags,
 } = require("../lib/db");
 const { getGeneralImageData } = require("../lib/ai/general-recognition.model");
 const { getPagination } = require("../lib/utils/query.util");
 
-const imageRouter = express.Router();
-
-imageRouter.post("/:id/related", async (req, res) => {
+async function getRelatedImages(req, res) {
   const id = +req.params.id;
   const limit = +req.body.limit;
   const imgData = await getImageFromDB(id);
   const related = await getRecommendedDetections(limit, imgData);
   return res.status(200).json({ data: related });
-});
+}
 
-imageRouter.post("/:id/tags", async (req, res) => {
+async function getSemanticTags(req, res) {
   const id = +req.params.id;
   const { url } = await getImageFromDB(id);
   const tags = await getGeneralImageData({ url });
@@ -27,33 +24,35 @@ imageRouter.post("/:id/tags", async (req, res) => {
   return res
     .status(200)
     .json({ data: tags.filter(({ probability }) => probability >= 0.9) });
-});
+}
 
-imageRouter.get("/recent", async (req, res) => {
+async function getRecentDetections(req, res) {
   const tags = req.query.tags?.split(",") || [];
   const { limit, skip, getMetaData } = getPagination(req.query);
-  const { recentDetections, total } = await getRecentDetections(
-    limit,
-    skip,
-    tags
-  );
+  const { recentDetections, total } = await getDetections(limit, skip, tags);
 
   const { pagination } = getMetaData(total);
 
   const data = { recentDetections, pagination };
   return res.status(200).json({ data });
-});
+}
 
-imageRouter.get("/tags/:limit", async (req, res) => {
+async function getImagesTags(req, res) {
   const limit = +req.params.limit;
   const topTags = await getTopTags(limit);
   return res.status(200).json({ data: topTags });
-});
+}
 
-imageRouter.get("/:id", async (req, res) => {
+async function getImageById(req, res) {
   const { id } = req.params;
   const data = await getImageFromDB(id);
   return res.status(200).json({ data });
-});
+}
 
-module.exports = imageRouter;
+module.exports = {
+  getRelatedImages,
+  getSemanticTags,
+  getRecentDetections,
+  getImagesTags,
+  getImageById,
+};

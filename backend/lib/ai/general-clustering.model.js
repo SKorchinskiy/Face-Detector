@@ -1,5 +1,5 @@
 const { setUpImageModel } = require(".");
-const clarify = require("./clarify.config");
+const clarify = require("../../configs/clarify.config");
 
 const clusteringModelCongif = {
   stub: clarify.stub,
