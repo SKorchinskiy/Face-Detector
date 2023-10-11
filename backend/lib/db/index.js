@@ -1,4 +1,4 @@
-const mysql = require("./mysql.config");
+const mysql = require("../../configs/mysql.config");
 
 async function getImageFromDB(id) {
   const [data] = await mysql("images").select("*").where({ id });
