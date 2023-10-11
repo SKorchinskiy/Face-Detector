@@ -81,7 +81,6 @@ export default function Compare() {
     };
 
   useEffect(() => {
-    console.log(comparison);
     if (comparison) setIsLoading(false);
   }, [comparison]);
 
