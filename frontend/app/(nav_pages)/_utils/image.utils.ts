@@ -48,8 +48,8 @@ export async function getDetectedImageId(data: ImageProvider) {
 }
 
 export async function getSimilarityResult(
-  firstFaceBuffer: string,
-  secondFaceBuffer: string
+  firstFaceData: { id: number; faceBuffer: Object },
+  secondFaceData: { id: number; faceBuffer: Object }
 ) {
   return await fetchData({
     url: "http://localhost:8000/compare",
@@ -59,7 +59,7 @@ export async function getSimilarityResult(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        images: [{ base64: firstFaceBuffer }, { base64: secondFaceBuffer }],
+        images: [firstFaceData, secondFaceData],
       }),
     },
   });
@@ -103,9 +103,19 @@ export async function compareImages(
     ...canvasDataFormatter(secondPixelBorder),
   })) as string;
 
+  const firstFaceData = {
+    id: firstDetection.id,
+    faceBuffer: { base64: firstFaceBuffer },
+  };
+
+  const secondFaceData = {
+    id: secondDetection.id,
+    faceBuffer: { base64: secondFaceBuffer },
+  };
+
   const comparisonResult = await getSimilarityResult(
-    firstFaceBuffer,
-    secondFaceBuffer
+    firstFaceData,
+    secondFaceData
   );
   return comparisonResult;
 }
