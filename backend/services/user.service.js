@@ -23,8 +23,12 @@ async function getUserStats({ id }) {
     user_id: id,
     modify: (_) => {},
   });
-  const time = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
   const last30Days = function (queryBuilder, table) {
+    const time = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    queryBuilder.where(`${table}.performed_at`, ">=", time);
+  };
+  const last7Days = function (queryBuilder, table) {
+    const time = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
     queryBuilder.where(`${table}.performed_at`, ">=", time);
   };
   const recentDetections = await getUserDetections({
@@ -35,12 +39,24 @@ async function getUserStats({ id }) {
     user_id: id,
     modify: last30Days,
   });
+  const latestDetections = await getUserDetections({
+    user_id: id,
+    modify: last7Days,
+  });
+  const latestComparisons = await getUserComparisons({
+    user_id: id,
+    modify: last7Days,
+  });
   return {
     detections,
     comparisons,
     recent: {
       detections: recentDetections,
       comparisons: recentComparisons,
+    },
+    latest: {
+      detections: latestDetections,
+      comparisons: latestComparisons,
     },
   };
 }
