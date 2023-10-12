@@ -2,6 +2,7 @@ const {
   processImage,
   createDetectionRecord,
 } = require("../services/image.service");
+const { getCurrentUserDetections } = require("../services/detection.service");
 
 async function detectFaces(req, res) {
   const data = req.body;
@@ -14,6 +15,13 @@ async function detectFaces(req, res) {
   return res.status(201).json({ data: id });
 }
 
+async function getUserDetections(req, res) {
+  const id = +req.params.id;
+  const detections = await getCurrentUserDetections({ id });
+  return res.status(200).json({ data: detections });
+}
+
 module.exports = {
   detectFaces,
+  getUserDetections,
 };
