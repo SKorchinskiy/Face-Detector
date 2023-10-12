@@ -20,6 +20,7 @@ async function getCurrentUser(req, res) {
         id: user.id,
         name: user.name,
         email: user.email,
+        created_at: new Date(user.created_at).toDateString(),
       },
     });
   } catch (error) {
