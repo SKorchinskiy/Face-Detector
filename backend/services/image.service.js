@@ -14,11 +14,13 @@ async function createComparisonRecord({
   user_id,
   first_face_id,
   second_face_id,
+  similarity,
 }) {
   await mysql("comparisons").insert({
     user_id,
     first_face_id,
     second_face_id,
+    similarity,
   });
 }
 
