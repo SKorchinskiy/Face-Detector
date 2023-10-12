@@ -5,14 +5,15 @@ const {
   getComparisonDetails,
 } = require("../lib/utils/vector.util");
 const { createComparisonRecord } = require("../services/image.service");
+const { getCurrentUserComparisons } = require("../services/compare.service");
 
 async function compareImages(req, res) {
   const [firstSource, secondSource] = req.body.images;
   const { embeddings: firstEmbeddings } = await getFaceEmbeddings({
-    base64: firstSource.base64,
+    base64: firstSource.faceBuffer.base64,
   });
   const { embeddings: secondEmbeddings } = await getFaceEmbeddings({
-    base64: secondSource.base64,
+    base64: secondSource.faceBuffer.base64,
   });
   L2(firstEmbeddings, secondEmbeddings);
   const details = getComparisonDetails(firstEmbeddings, secondEmbeddings);
@@ -25,12 +26,22 @@ async function compareImages(req, res) {
 
   await createComparisonRecord({
     user_id: req.user.id,
-    first_face_id: 102,
-    second_face_id: 102,
+    similarity: Math.max(Math.round(similarity * 100), 0),
+    first_face_id: firstSource.id,
+    second_face_id: secondSource.id,
   });
   return res.status(200).json({ data });
 }
 
+async function getUserComparisons(req, res) {
+  const id = req.params.id;
+  const recentComparisons = await getCurrentUserComparisons({ id });
+  return res.status(200).json({
+    data: recentComparisons,
+  });
+}
+
 module.exports = {
   compareImages,
+  getUserComparisons,
 };
