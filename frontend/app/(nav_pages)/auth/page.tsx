@@ -19,8 +19,7 @@ export default function Auth() {
   const userContext = useContext(UserContext);
 
   useEffect(() => {
-    if (userContext.isSignedIn)
-      router.push("http://localhost:3000/user/1/profile");
+    if (userContext.isSignedIn) router.push("http://localhost:3000/profile");
   }, [router, userContext]);
 
   const authHandler = async (fields: Array<Field>) => {
@@ -39,7 +38,7 @@ export default function Auth() {
     });
     if (token) {
       userContext.toggleAuthState();
-      router.push("http://localhost:3000/user/1/profile");
+      router.push("http://localhost:3000/profile");
     }
   };
 
