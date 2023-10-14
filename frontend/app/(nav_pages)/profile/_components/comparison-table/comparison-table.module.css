@@ -1,0 +1,23 @@
+.table {
+  width: 100%;
+}
+
+.table__comparisons_head-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  overflow: scroll;
+  box-sizing: border-box;
+  border: 1px solid black;
+}
+
+.table__comparisons_body-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  overflow: scroll;
+  box-sizing: border-box;
+  border: 1px solid black;
+}
+
+.table__data {
+  textalign: center;
+}
