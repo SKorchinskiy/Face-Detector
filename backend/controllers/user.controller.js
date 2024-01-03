@@ -5,7 +5,6 @@ async function currentUserStats(req, res) {
     const stats = await userService.getUserStats({ id: req.user.id });
     return res.status(200).json({ data: stats });
   } catch (error) {
-    console.log(error);
     res.status(error.status || 500).json({
       message: error.message || "unknown error",
     });

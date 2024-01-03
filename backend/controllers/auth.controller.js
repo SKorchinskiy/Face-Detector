@@ -13,7 +13,6 @@ async function signInController(req, res) {
 
     return res.status(200).json({ data: accessToken });
   } catch (error) {
-    console.log(error);
     const { message } = error;
     return res.status(400).json({ message });
   }

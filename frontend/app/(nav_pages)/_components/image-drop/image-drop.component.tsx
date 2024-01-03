@@ -38,7 +38,6 @@ export default function ImageDrop({ imageUploadHandler }: ImageDropProps) {
       setDragEnter(false);
       await imageUploadHandler(imageFile);
     } catch (error) {
-      // console.error(error);
       setDragEnter(false);
     }
   };
