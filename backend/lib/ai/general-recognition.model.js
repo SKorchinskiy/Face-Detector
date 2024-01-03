@@ -20,7 +20,6 @@ async function getGeneralImageData(data) {
     }));
     return tags;
   } catch (error) {
-    console.log({ error });
     return error;
   }
 }

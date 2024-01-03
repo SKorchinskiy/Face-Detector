@@ -25,7 +25,6 @@ async function getFaceDetectionData(data) {
       detected_faces: formatDetectionData(response),
     };
   } catch (error) {
-    console.log({ error });
     return error;
   }
 }

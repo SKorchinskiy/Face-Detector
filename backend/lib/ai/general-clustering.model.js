@@ -21,7 +21,6 @@ async function getImageClusteringData(data) {
     const [x_projection, y_projection] = formatClasteringData(response);
     return { x_projection, y_projection };
   } catch (error) {
-    console.log({ error });
     return error;
   }
 }

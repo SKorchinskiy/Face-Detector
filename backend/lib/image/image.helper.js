@@ -1,27 +1,23 @@
 async function createIMGBBImage(formData) {
-  try {
-    const response = await fetch(
-      `https://api.imgbb.com/1/upload?key=${process.env.IMGBB_API_KEY}`,
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
-    let buffer = [];
-    for await (const chunk of response.body) {
-      buffer = buffer.concat(...chunk);
+  const response = await fetch(
+    `https://api.imgbb.com/1/upload?key=${process.env.IMGBB_API_KEY}`,
+    {
+      method: "POST",
+      body: formData,
     }
-    const { data } = JSON.parse(String.fromCharCode(...buffer));
-    return {
-      url: data.image.url,
-      bytes: data.size,
-      width: data.width,
-      height: data.height,
-      expiration: data.expiration,
-    };
-  } catch (error) {
-    console.log("hosting error", error);
+  );
+  let buffer = [];
+  for await (const chunk of response.body) {
+    buffer = buffer.concat(...chunk);
   }
+  const { data } = JSON.parse(String.fromCharCode(...buffer));
+  return {
+    url: data.image.url,
+    bytes: data.size,
+    width: data.width,
+    height: data.height,
+    expiration: data.expiration,
+  };
 }
 
 async function getDataFromBinaryString(binaryString) {
