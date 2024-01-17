@@ -8,7 +8,7 @@
 
 + [Project Workflow](https://github.com/SKorchinskiy/Face-Detector?tab=readme-ov-file#project-workflow)
 
-+ [Project Optimizations](https://github.com/SKorchinskiy/Face-Detector?tab=readme-ov-file#project-optimizations)
++ [List of used Clarifai Machine Learning Models](https://github.com/SKorchinskiy/Face-Detector?tab=readme-ov-file#list-of-used-clarifai-machine-learning-models)
 
 + [Why did I build this project ?](https://github.com/SKorchinskiy/Face-Detector?tab=readme-ov-file#why-did-i-build-this-project-)
 
@@ -26,6 +26,9 @@
 - **Jest and Testing Library** *as tools for testing User Interface for consistency*
 - **Clarifai API** *as a RPC ([remote procedure call](https://en.wikipedia.org/wiki/Remote_procedure_call#:~:text=RPC%20is%20a%20request%E2%80%93response,the%20application%20continues%20its%20process.)) service for image processing*
 - **ImgBB** *as a service to store images*
+
+> [!TIP]
+> Images can be saved in the database using base64 string. However, I've decided to save them on the remote service to save memory. In addition, when using cloud services like AWS, they have services like S3 ([Simple Storage Service](https://aws.amazon.com/s3/)) which in this case can be used as image storage.  
 
 ## Project Structure 
 
@@ -247,91 +250,80 @@
 
 ## Project Workflow
 
-<!--The project is deployed using Netlify. You can check it [here](https://curious-wisp-0e847c.netlify.app/). Netlify was chosen due to its availability and being free of charge to some limit.-->
+<!--The project is deployed using AWS. You can check it [here](). -->
 
-![Application Workflow](https://drive.google.com/uc?id=1Gg6sYDSOhw5sspfGO0_a29dZ-cmCjOdf)
-<!--
-- **Authentication**: when using the application, you can sign up or sign in to it. If you prefer manually entering the credentials, they will be saved to the cloud firestore. It is required to save the credentials, so you can sign in whenever you want without registering each time. However, manually entering credentials for each service we use is tiring. Therefore, you can sign in using Google provider. A new window will be created where you'll need to choose your google account for service usage. You can checkout this page [here](https://curious-wisp-0e847c.netlify.app/auth).
+## Higher level overview
 
-![Authentication Page Screenshot](https://drive.google.com/uc?id=1OeEOb33P5DizNtIizaWyDSpSEqUOYdlV)
+![Application Workflow](https://drive.google.com/uc?id=19q8NOoxu96wT1FCxHqx9XS3QuawzA3Ey)
 
-- **Main page**: After signing in or just being on the main page (being authenticated isn't mandatory for the application), you'll see all the categories of products that the clothing store provides. You can checkout this page [here](https://curious-wisp-0e847c.netlify.app/home).
+### Entity-Relationship Diagram
+![ER-Diagram](https://drive.google.com/uc?id=1u8RghwB5tMpGkBYsi1cNNSMmFHx2pmjV)
 
-![Main Page Screenshot](https://drive.google.com/uc?id=1M_T1_6TmOkv3Jg5TNERc6-_A748BVXux)
+### Detailed description
 
-- **Specific Category Page**: By clicking on a category on the main page, you'll be redirected to the chosen category page. You can checkout this page [here](https://curious-wisp-0e847c.netlify.app/category/Mens).
+- **Main Page**: when opening the application, you can proceed both with authentication or just immediately try the app
 
-![Mens Category Screenshot](https://drive.google.com/uc?id=1KJLujs-Zci0nhXabej8e7eEsXQtwt8_B)
+![](https://drive.google.com/uc?export=view&id=1FsbBVUk7rbdRsA7ckZQKRmk1RdHE_yE2)
 
-- **Product Cart**: After hovering on the desired product, you can add it to the cart, which contains all the chosen products in specific amount. (It's located in the upper right corner)
+> [!IMPORTANT]
+> Provided GIF is slowed by screen capturing software during conversion, however animation and transformation work faster in reality
 
-![Product Cart Screenshot](https://drive.google.com/uc?id=1I_nX0W8sAu7pBSkSaEw7MrxLHQhz6PG1)
 
-- **Shop Page**: On the shop page limited amount of each category products is gathered. You can checkout this page [here](https://curious-wisp-0e847c.netlify.app/shop)
+- **Image Provider Page**: there are two ways of providing image to the service:
+    + via device file system
+    + via image url
 
-![Shop Page Screentshot](https://drive.google.com/uc?id=1w4ja1cEV2F5KPUD7MVs0zGAS6Q6APFM5)
+![](https://drive.google.com/uc?export=view&id=1RFng_XNBDB8SMOLYUf9cNCEay2kZRarC)
 
-- **Checkout Page**: Through the cart you can get to the checkout page, where chosen products are listed. You can checkout this page [here](https://curious-wisp-0e847c.netlify.app/checkout)
+- **Face Recognition Page**: after providing image on the previous step, you'll be redirected to the detection result page. On the page there are:
+    + provided image with bounding box (or boxes, if there are multiple faces)
+    + Side box, which retrieves only faces from the image and gives the probability of it being a human face (estimated by machine learning model)
+    + Generated tags, which describe the provided image (also generated by machine learning model)
+    + Meta data about the action (user, expiration, image size, creation date, url to ImgBB storage)
+    + Similar detections
 
-![Checkout Page Screeshot](https://drive.google.com/uc?id=1MttHy7EM0wN4Bxf0QCfp-0dc924CzFDQ)
+> [!IMPORTANT]
+> Each image can be represented in n-dimensional space. The underlying machine learning model represents image in 512-dimensional space, each value of which is in the range [-1, 1]. Thus, we can compare distance between provided image and those in database and pick k-closest. Using this algorithm, similar detections are recommended to the user.
 
--->
+![](https://drive.google.com/uc?export=view&id=18kJ-SEuyZhIK7gLJ5icF21_huykNZgxE)
 
-## Project Optimizations
+- **Comparison Page**: on this page you can provide two images of faces and check their similarity. The presented comparison is performed by representing each of the provided images as embedding of length 512 using ML model. Those embeddings are compared using cosine similarity. In addition, an impact of each of the embedding parameter is calculated.
 
-<!--
+> [!IMPORTANT]
+> The underlying clarifai machine learning models are trained on restricted data sets and are free community versions, so the results sometimes could be not as precise as expected.
 
-+ Web vitals
+![](https://drive.google.com/uc?export=view&id=1hbvyHthBDQuDw6fBBPvMsDZQhlOLjS40)
 
-Here are measurements made with PageSpeed Insights. You can check detailed results [here](https://pagespeed.web.dev/analysis/https-curious-wisp-0e847c-netlify-app/r4iv81jok6?form_factor=desktop).
+- **Gallery Page**: on this page you can navigate through the all detections and filter them by tags
 
-![PC Performance Screenshot](https://drive.google.com/uc?id=1LlM32TdVDjZQh6sKC1Fdif3V9Jd5QkKK)
+![](https://drive.google.com/uc?export=view&id=1GQ-fWRwaK9kTZ1K86GPNJaLzcQO-obYQ)
 
-![Mobile Performance Screenshots](https://drive.google.com/uc?id=1e5vdudCXKT25-0NOIfZWI-ltM09gSOgi)
+## List of used Clarifai Machine Learning Models
 
-> [!TIP]
-> As you can see, efficiency isn't great for mobile version. It can be impoved by:
->  + storing images of different sizes in the data storage. This way the amount of data transfered via network is less
->  + using server side rendering. By using this strategy, the server is responsible for rendering, not client's device
->  + using CDN + Redis. It can significantly improve performance as product images are the same for each user, so the caching will be efficient
-
-+ Different screen resolutions
-
-You've previously seen screenshots of the applications made from laptop. Now, I want to demonstrate how the app looks from mobile. 
++ **Face embedder model**. Check model [here](https://clarifai.com/clarifai/main/models/face-identification-transfer-learn)
+  + MODEL_ID="face-identification-transfer-learn"
+  + MODEL_VERSION_ID="fc3b8814fbe54533a3d80a1896dc9884"
++ **Face recognition model**. Check model [here](https://clarifai.com/clarifai/main/models/face-detection)
+  + MODEL_ID="face-detection"
+  + MODEL_VERSION_ID="6dc7e46bc9124c5c8824be4822abe105"
++ **General clustering model**. Check model [here](https://clarifai.com/clarifai/main/models/general-clusterering)
+  + MODEL_ID="general-clusterering"
+  + MODEL_VERSION_ID="cc2074cff6dc4c02b6f4e1b8606dcb54"
++ **General recognition model**. Check model [here](https://clarifai.com/clarifai/main/models/general-image-recognition)
+  + MODEL_ID="general-image-recognition"
+  + MODEL_VERSION_ID="aa7f35c01e0642fda5cf400f543e7c40"
+ 
 > [!NOTE]
-> The application is created as a progressive web app, so it can be added on the main screen of your device
-
-![Mobile Application Layout Home Page](https://drive.google.com/uc?id=19Pz4HE-fYatwtf3EID8r6q5BGBWuGuqY)
-![Mobile Application Layout Shop Page](https://drive.google.com/uc?id=1yB9Zdc_mrZbm82l6mnhxam-Z4ta-6b-c)
-![Mobile Application Layout Auth Page](https://drive.google.com/uc?id=1dLS4Ab0Nt8MTAq7zc-Rj3X2hGb9ImZ0t)
-![Mobile Application Layout Product Cart](https://drive.google.com/uc?id=12N6X5sgyT-t3wetS7bS2oB364zsqY0Zi)
-![Mobile Application Layout Checkout Page](https://drive.google.com/uc?id=1X-Y5DM9qK8W2sDX3siP336x_XLkaEJoI)
-
-+ Partial Rendering
-
-Each page is loaded using lazy loading strategy. The main idea is that the content is loaded not simultaneously from the begining, but by chunks. So the needed page is loaded only when it is needed. More about lazy loading you can read [here](https://en.wikipedia.org/wiki/Lazy_loading).
-
-Code from the application given below. You can check it out [here](https://github.com/SKorchinskiy/Clothing-Store/blob/main/src/routes/index.js).
-```
-const Home = lazy(() => import("../pages/home/home.page"));
-const Auth = lazy(() => import("../pages/auth/auth.page"));
-const Shop = lazy(() => import("../pages/shop/shop.page"));
-const Checkout = lazy(() => import("../pages/checkout/checkout.page"));
-const Category = lazy(() => import("../pages/category/category.page"));
-```
-Also, during page loading the loader is shown
-
-![Loader Screenshot](https://drive.google.com/uc?id=1UMimf5oBYtximrzGJG86INxBhJUxYIgb)
-
--->
+> + **Face embeder model** is used to represent image in 512-dimensional space
+> + **Face recognition model** is used to get a bounding box of the face on the provided image
+> + **General clustering model** is used to generate two-dimensional projections as an attempt to reuse the same image without repeating detections (for example, user can detect the same image n times, however, it will be detected only once and other attempts will return processed data which is in database)
+> + **General recognition model** is used to generate relevant tags which describe the provided image
 
 ## Why did I build this project ?
 
-<!--
-I built Clothing Store project to improve my skills in web development. This application is the first relatively big application where I've gained lots of skills and knowledge. In the next section I've listed what I've learned during the project building process.
--->
+I built Face Detector project to understand higher level concepts of machine learning as well as to improve my skills in web development. However, it is worth noting that currently tests don't cover server side and partially client side due to the current complexity of testing server components generated with Next.js. In the next section I've listed what I've learned during the project building process.
+
 ## What did I learn ?
-<!--
-+ **Technologies**: React, Redux, Redux-Saga, React-Router-Dom, Jest, Testing Library, Cloud Firestore, HTML, CSS
-+ **Strategies and Concepts**: lazy loading, serverless functions, page routing, device resolution adaptation, progressive web applications, web vitals optimization, client side rendering, partial rendering, loaders, service workers
--->
+
++ **Technologies**: React, Next.js, Express.js, Knex.js, MySQL, Jest, Testing Library
++ **Strategies and Concepts**: client / server components, server side rendering, loaders, cropping images with code, image embeddings, clustering, buffers, base64 data representation (used to transmit images through the network)
