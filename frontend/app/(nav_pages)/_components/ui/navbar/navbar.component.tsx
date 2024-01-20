@@ -33,13 +33,18 @@ export default function Navbar() {
       </div>
       <div className={styles["navbar-container__right"]}>
         {isSignedIn ? (
-          <Link
-            href={"/auth"}
-            className={styles.link}
-            onClick={(e) => userContext.toggleAuthState()}
-          >
-            Sign Out
-          </Link>
+          <>
+            <Link href={"/profile"} className={styles.link}>
+              Profile
+            </Link>
+            <Link
+              href={"/auth"}
+              className={styles.link}
+              onClick={(e) => userContext.toggleAuthState()}
+            >
+              Sign Out
+            </Link>
+          </>
         ) : (
           <Link href={"/auth"} className={styles.link}>
             Sign In
