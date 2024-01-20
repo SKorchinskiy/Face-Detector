@@ -60,7 +60,7 @@ export default function SignUpForm({ authHandler }: SignUpFormProps) {
         placeholder="confirm a password"
         onFieldChange={fieldUpdateHandler}
       />
-      <Button className="btn-container-mini" clickHandler={signUpHandler}>
+      <Button className="sign-button" clickHandler={signUpHandler}>
         <span>Sign Up</span>
       </Button>
     </>
