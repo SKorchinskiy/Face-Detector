@@ -29,7 +29,7 @@ function FaceCanvasList({ imagesMetaData }: FaceCanvasListProps) {
               >
                 <FaceCanvas
                   id={box_index}
-                  canvasId={Math.round(Math.random() * 100)}
+                  canvasId={Math.round(Math.random() * 1e6)}
                   image_url={imageMetaData.url}
                   box_width={width}
                   box_height={height}
