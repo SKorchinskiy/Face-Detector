@@ -42,14 +42,17 @@ export default async function ImageRecognition({
   params,
 }: ImageRecognitionProps) {
   const imageMetaData: ImageMetaData = await fetchData({
-    url: `http://localhost:8000/images/${params.id}`,
+    url: `http://fd-backend:8000/images/${params.id}`,
+    options: {
+      method: "GET",
+    },
   });
 
   const imageShortenerValue =
     600 / Math.max(imageMetaData.width, imageMetaData.height);
 
   const recentDetections: ImageMetaData[] = await fetchData({
-    url: `http://localhost:8000/images/${params.id}/related`,
+    url: `http://fd-backend:8000/images/${params.id}/related`,
     options: {
       method: "POST",
       headers: {
@@ -60,7 +63,7 @@ export default async function ImageRecognition({
   });
 
   const tags: { tag_name: string; probability: number }[] = await fetchData({
-    url: `http://localhost:8000/images/${params.id}/tags`,
+    url: `http://fd-backend:8000/images/${params.id}/tags`,
     options: { method: "POST" },
   });
 
