@@ -1,4 +1,4 @@
-const config = {
+const config = (() => ({
   client: process.env.KNEX_CLIENT,
   connection: {
     host: process.env.KNEX_CONNECTION_HOST,
@@ -7,6 +7,6 @@ const config = {
     password: process.env.KNEX_CONNECTION_PASSWORD,
     database: process.env.KNEX_CONNECTION_DATABASE,
   },
-};
+}))();
 
 module.exports = require("knex")(config);

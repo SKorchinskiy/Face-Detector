@@ -25,7 +25,7 @@ async function compareImages(req, res) {
     };
 
     await createComparisonRecord({
-      user_id: req.user.id,
+      user_id: req?.user?.id || 1,
       similarity: Math.max(Math.round(similarity * 100), 0),
       first_face_id: firstSource.id,
       second_face_id: secondSource.id,
