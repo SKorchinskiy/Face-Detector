@@ -1,11 +1,23 @@
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 import { screen, render, waitFor } from "@testing-library/react";
-import Images, { DEFAULT_RECENT_DETECTIONS } from "./page";
-import TagsProvider, { TagsContext } from "../_context/tags.context";
+import Images from "./page";
+import TagsProvider from "../_context/tags.context";
 import { RequestOptions } from "https";
 import memoryRouter from "next-router-mock";
 import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider";
+
+const DEFAULT_RECENT_DETECTIONS = {
+  recentDetections: [],
+  pagination: {
+    hasPrev: false,
+    hasNext: false,
+    prevPage: 1,
+    currentPage: 1,
+    nextPage: 1,
+    pages: 1,
+  },
+};
 
 var searchParamsObject = Object.freeze({
   get: jest.fn().mockReturnValue(""),

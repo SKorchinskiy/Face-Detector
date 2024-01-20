@@ -21,13 +21,13 @@ import Sidebar from "./_components/side-bar/side-bar.component";
 import Image from "next/image";
 import { TagsContext } from "../_context/tags.context";
 
-export type RecentDetections = {
+type RecentDetections = {
   recentDetections: ImageMetaData[];
 } & PaginationBarProps;
 
 export type Tag = { count: number } & TagElement;
 
-export const DEFAULT_RECENT_DETECTIONS: RecentDetections = {
+const DEFAULT_RECENT_DETECTIONS: RecentDetections = {
   recentDetections: [],
   pagination: {
     hasPrev: false,

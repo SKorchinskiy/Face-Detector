@@ -1,0 +1,32 @@
+services:
+  mysql:
+    image: mysql:5.7
+    platform: linux/x86_64
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      - ./db-init:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: admin123
+      MYSQL_DATABASE: face_detector
+    ports:
+      - 3306:3306
+  backend:
+    depends_on:
+      - mysql
+    container_name: fd-backend
+    env_file:
+      - ./backend/.env
+    build: ./backend
+    command: npm run start
+    ports:
+      - 8000:8000
+    volumes:
+      - ./:/usr/src/backend
+  frontend:
+    depends_on:
+      - backend
+    container_name: fd-frontend
+    build: ./frontend
+    command: npm run dev
+    ports:
+      - 3000:3000

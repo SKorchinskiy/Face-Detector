@@ -45,7 +45,7 @@ export default function SignInForm({ authHandler }: SignInFormProps) {
         onFieldChange={fieldUpdateHandler}
       />
       <Button
-        className="btn-container-mini"
+        className="sign-button"
         // disabled
         clickHandler={signInHandler}
       >

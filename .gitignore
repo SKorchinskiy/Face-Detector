@@ -17,3 +17,5 @@
 **/.env*
 
 .vscode
+
+**/mysql-data

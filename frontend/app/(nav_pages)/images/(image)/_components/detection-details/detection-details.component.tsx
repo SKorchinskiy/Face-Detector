@@ -7,14 +7,13 @@ import { ImageMetaData } from "../../[id]/page";
 import { useMemo } from "react";
 
 function formatDetectionDetails(imageMetaData: ImageMetaData) {
-  const user = "guest";
   const expiration = imageMetaData.expiration || "-";
   const size = `${
     Math.round((imageMetaData.bytes / 1024 ** 2) * 10000) / 10000
   }mb`;
   const creation = imageMetaData.created_at;
   const url = imageMetaData.url;
-  return { user, expiration, size, creation, url };
+  return { expiration, size, creation, url };
 }
 
 export default function DetectionDetails(imageMetaData: ImageMetaData) {
