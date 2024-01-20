@@ -36,7 +36,10 @@
 📦 face-detector
 ├─ .gitignore
 ├─ LICENSE
+├─ README.md
 ├─ backend
+│  ├─ .dockerignore
+│  ├─ Dockerfile
 │  ├─ app.js
 │  ├─ bin
 │  │  └─ www
@@ -82,9 +85,14 @@
 │     ├─ detection.service.js
 │     ├─ image.service.js
 │     └─ user.service.js
+├─ db-init
+│  └─ db-init.sql
+├─ docker-compose.yml
 ├─ frontend
+│  ├─ .dockerignore
 │  ├─ .eslintrc.json
 │  ├─ .gitignore
+│  ├─ Dockerfile
 │  ├─ README.md
 │  ├─ app
 │  │  ├─ (nav_pages)
@@ -203,9 +211,12 @@
 │  │  │     │  ├─ comparison-table
 │  │  │     │  │  ├─ comparison-table.component.tsx
 │  │  │     │  │  └─ comparison-table.module.css
-│  │  │     │  └─ detection-table
-│  │  │     │     ├─ detection-table.component.tsx
-│  │  │     │     └─ styles.module.css
+│  │  │     │  ├─ detection-table
+│  │  │     │  │  ├─ detection-table.component.tsx
+│  │  │     │  │  └─ styles.module.css
+│  │  │     │  └─ statistics
+│  │  │     │     ├─ statistics.component.tsx
+│  │  │     │     └─ statistics.module.css
 │  │  │     ├─ page.module.css
 │  │  │     └─ page.tsx
 │  │  ├─ Home.test.tsx
