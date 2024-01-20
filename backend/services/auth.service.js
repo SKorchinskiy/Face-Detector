@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const mysql = require("../configs/mysql.config");
 const userService = require("../services/user.service");
 
-async function signUp({ name, username, email, password }) {
+async function signUp({ name, email, password }) {
   const exists = await userService.checkUserExistsByEmail({ email });
   if (exists) {
     throw new Error("User with provided email already exists!");
@@ -11,7 +11,6 @@ async function signUp({ name, username, email, password }) {
   const hashedPassword = await bcrypt.hash(password, 10);
   const [isRegistered] = await mysql("users").insert({
     name,
-    username,
     email,
     password: hashedPassword,
   });
