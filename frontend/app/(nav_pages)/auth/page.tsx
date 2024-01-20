@@ -25,7 +25,7 @@ export default function Auth() {
   const authHandler = async (fields: Array<Field>) => {
     const baseUrl = "http://localhost:8000/auth";
     const url = baseUrl + (isSignedIn ? "/sign-in" : "/sign-up");
-    const token = await fetchData({
+    let token = await fetchData({
       url,
       options: {
         method: "POST",
@@ -36,6 +36,21 @@ export default function Auth() {
         body: JSON.stringify(fields),
       },
     });
+
+    if (!isSignedIn) {
+      token = await fetchData({
+        url: baseUrl + "/sign-in",
+        options: {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            credentials: "include",
+          },
+          body: JSON.stringify(fields),
+        },
+      });
+    }
+
     if (token) {
       userContext.toggleAuthState();
       router.push("http://localhost:3000/profile");
