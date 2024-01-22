@@ -10,6 +10,7 @@ services:
       MYSQL_DATABASE: face_detector
     ports:
       - 3306:3306
+    restart: always
   backend:
     depends_on:
       - mysql
@@ -22,6 +23,7 @@ services:
       - 8000:8000
     volumes:
       - ./:/usr/src/backend
+    restart: always
   frontend:
     depends_on:
       - backend
@@ -30,3 +32,4 @@ services:
     command: npm run dev
     ports:
       - 3000:3000
+    restart: always
