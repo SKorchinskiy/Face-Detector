@@ -42,7 +42,7 @@ export default async function ImageRecognition({
   params,
 }: ImageRecognitionProps) {
   const imageMetaData: ImageMetaData = await fetchData({
-    url: `http://fd-backend:8000/images/${params.id}`,
+    url: `https://skorchinskiy.pro:8000/images/${params.id}`,
     options: {
       method: "GET",
     },
@@ -52,7 +52,7 @@ export default async function ImageRecognition({
     600 / Math.max(imageMetaData.width, imageMetaData.height);
 
   const recentDetections: ImageMetaData[] = await fetchData({
-    url: `http://fd-backend:8000/images/${params.id}/related`,
+    url: `https://skorchinskiy.pro:8000/images/${params.id}/related`,
     options: {
       method: "POST",
       headers: {
@@ -63,7 +63,7 @@ export default async function ImageRecognition({
   });
 
   const tags: { tag_name: string; probability: number }[] = await fetchData({
-    url: `http://fd-backend:8000/images/${params.id}/tags`,
+    url: `https://skorchinskiy.pro:8000/images/${params.id}/tags`,
     options: { method: "POST" },
   });
 
@@ -71,13 +71,12 @@ export default async function ImageRecognition({
     <div className={styles["detection-container"]}>
       <div className={styles["detection-container__main"]}>
         <div className={styles["detection-image-container"]}>
-          <Image
+          <img
             id="face-to-recognize"
             style={{ zIndex: 10, position: "relative" }}
             width={imageMetaData.width * imageShortenerValue}
             height={imageMetaData.height * imageShortenerValue}
             alt="face"
-            priority={true}
             src={imageMetaData.url}
           />
           <div className={styles["face-box-list"]}>

@@ -7,14 +7,14 @@ export default function Home() {
   return (
     <Fragment>
       <div className={styles["faces-container"]}>
-        <Image
+        <img
           src="/face.png"
           width="350"
           height="350"
           className={`${styles["face-image"]} ${styles["rotate-left"]}`}
           alt="face"
         />
-        <Image
+        <img
           src="/face.png"
           width="350"
           height="350"

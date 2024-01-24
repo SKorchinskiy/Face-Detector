@@ -11,7 +11,7 @@ type DetectionProps = {
 export default function Detection({ detection }: DetectionProps) {
   return (
     <Link href={`/images/${detection.id}`}>
-      <Image
+      <img
         id="face-to-recognize"
         className={styles["detection-image"]}
         width={detection.width}

@@ -4,7 +4,6 @@ import styles from "./page.module.css";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../_context/user.context";
 import { fetchData } from "../_utils/fetch.util";
-import Image from "next/image";
 import Statistics from "./_components/statistics/statistics.component";
 
 export default function Profile() {
@@ -18,7 +17,7 @@ export default function Profile() {
 
   useEffect(() => {
     const fetchStatistics = async () => {
-      const url = "http://localhost:8000/users/stats";
+      const url = "https://skorchinskiy.pro:8000/users/stats";
       const options = { method: "GET" };
       const stats = await fetchData({ url, options });
       setStatistics(stats);
@@ -32,7 +31,7 @@ export default function Profile() {
         <div className={styles["profile-page__info-blocks"]}>
           <div className={styles["profile-page__info-blocks_element"]}>
             <h2>Personal Information</h2>
-            <Image
+            <img
               src={"/profile-icon.png"}
               width={205}
               height={118}
