@@ -19,7 +19,16 @@ export default function FaceCanvas(props: FaceCanvasProps) {
   const canvasId = useRef(props.canvasId.toString());
 
   useEffect(() => {
-    mountCanvas({ ...props, canvasId: canvasId.current });
+    const mountImage = async () => {
+      await mountCanvas({ ...props, canvasId: canvasId.current });
+    };
+
+    mountImage();
+
+    return () => {
+      const target = document.getElementById(`face-canvas-${canvasId.current}`);
+      target?.parentNode?.removeChild(target);
+    };
   }, [props]);
 
   return (

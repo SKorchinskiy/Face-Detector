@@ -10,17 +10,23 @@ export async function mountCanvas({
 }: FaceCanvasProps) {
   const image = new Image();
   return new Promise((resolve, reject) => {
+    const tid = setTimeout(() => reject(), 12000);
     image.src = image_url;
     image.crossOrigin = "Anonymous";
 
-    image.addEventListener("load", () => {
+    const cb = () => {
+      image.removeEventListener("load", cb);
+
       const canvas =
         (document.getElementById(
           `face-canvas-${canvasId}`
         ) as HTMLCanvasElement) || document.createElement("canvas");
       const context = canvas.getContext("2d");
 
-      if (!context) reject("The context is not available");
+      if (!context) {
+        clearTimeout(tid);
+        reject("The context is not available");
+      }
 
       canvas.setAttribute("width", `${box_width}`);
       canvas.setAttribute("height", `${box_height}`);
@@ -37,7 +43,11 @@ export async function mountCanvas({
         box_height
       );
       const croppedData = canvas.toDataURL("image/jpeg").split(",")[1];
+
+      clearTimeout(tid);
       resolve(croppedData);
-    });
+    };
+
+    image.addEventListener("load", cb);
   });
 }
