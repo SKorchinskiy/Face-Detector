@@ -19,11 +19,11 @@ export default function Auth() {
   const userContext = useContext(UserContext);
 
   useEffect(() => {
-    if (userContext.isSignedIn) router.push("http://localhost:3000/profile");
+    if (userContext.isSignedIn) router.push("https://skorchinskiy.pro/profile");
   }, [router, userContext]);
 
   const authHandler = async (fields: Array<Field>) => {
-    const baseUrl = "http://localhost:8000/auth";
+    const baseUrl = "https://skorchinskiy.pro:8000/auth";
     const url = baseUrl + (isSignedIn ? "/sign-in" : "/sign-up");
     let token = await fetchData({
       url,
@@ -53,7 +53,7 @@ export default function Auth() {
 
     if (token) {
       userContext.toggleAuthState();
-      router.push("http://localhost:3000/profile");
+      router.push("https://skorchinskiy.pro/profile");
     }
   };
 

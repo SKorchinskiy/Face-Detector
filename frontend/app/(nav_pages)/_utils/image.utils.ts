@@ -35,7 +35,7 @@ export function getPixelBorderValues(
 
 export async function getDetectedImageId(data: ImageProvider) {
   const id = await fetchData({
-    url: "http://localhost:8000/detect",
+    url: "https://skorchinskiy.pro:8000/detect",
     options: {
       method: "POST",
       headers: {
@@ -51,8 +51,8 @@ export async function getSimilarityResult(
   firstFaceData: { id: number; faceBuffer: Object },
   secondFaceData: { id: number; faceBuffer: Object }
 ) {
-  return await fetchData({
-    url: "http://localhost:8000/compare",
+  const data = await fetchData({
+    url: "https://skorchinskiy.pro:8000/compare",
     options: {
       method: "POST",
       headers: {
@@ -63,6 +63,7 @@ export async function getSimilarityResult(
       }),
     },
   });
+  return data;
 }
 
 export function getBoundingBoxes(detected_faces: DetectedFace[]) {
@@ -91,13 +92,13 @@ export async function compareImages(
     secondDetection
   );
   const firstFaceBuffer = (await mountCanvas({
-    id: 1,
+    id: firstDetection.id,
     canvasId: Math.round(Math.random()).toString(),
     image_url: firstDetection.url,
     ...canvasDataFormatter(firstPixelBorder),
   })) as string;
   const secondFaceBuffer = (await mountCanvas({
-    id: 1,
+    id: secondDetection.id,
     canvasId: Math.round(Math.random()).toString(),
     image_url: secondDetection.url,
     ...canvasDataFormatter(secondPixelBorder),

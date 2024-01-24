@@ -16,7 +16,7 @@ export default function UserProvider({ children }: PropsWithChildren) {
   useEffect(() => {
     const fetchCurrentUser = async () => {
       const user = await fetchData({
-        url: "http://localhost:8000/users",
+        url: "https://skorchinskiy.pro:8000/users",
         options: { method: "GET" },
       });
       setCurrentUser(user);
