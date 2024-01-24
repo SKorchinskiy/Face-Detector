@@ -67,10 +67,10 @@ export default function Detect() {
     setIsLoading(true);
     if (imageInput.url) {
       const id = await getDetectedImageId({ url: imageInput.url });
-      setDetectedImageId(id);
+      if (typeof id !== "undefined") setDetectedImageId(id);
     } else if (imageInput.base64) {
       const id = await getDetectedImageId({ base64: imageInput.base64 });
-      setDetectedImageId(id);
+      if (typeof id !== "undefined") setDetectedImageId(id);
     }
   };
 
