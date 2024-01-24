@@ -21,9 +21,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 app.use(
   cors({
-    origin: (origin, callback) => {
-      callback(null, true);
-    },
+    origin: process.env.ORIGIN,
     credentials: true,
   })
 );

@@ -53,9 +53,9 @@ export default function Images() {
 
   useEffect(() => {
     const getTags = async () => {
-      const url = `http://localhost:8000/images/tags/${100}`;
+      const url = `https://skorchinskiy.pro:8000/images/tags/${100}`;
       const topTags = await fetchData({ url });
-      setTags(topTags);
+      if (Array.isArray(topTags)) setTags(topTags);
     };
     getTags();
   }, []);
@@ -65,7 +65,7 @@ export default function Images() {
     const fetchImages = async () => {
       const tags = searchParams.get("tags");
       const url =
-        `http://localhost:8000/images/recent?page=${currentPage}&limit=${8}` +
+        `https://skorchinskiy.pro:8000/images/recent?page=${currentPage}&limit=${8}` +
         (tags ? `&tags=${tags}` : "");
       const options = { method: "GET" };
       const { recentDetections, pagination }: RecentDetections =
@@ -128,7 +128,7 @@ export default function Images() {
           className={styles["images-container__arrow"]}
           onClick={() => setIsSidebarOpen(true)}
         >
-          <Image alt="toggle" src="/arrow-right.svg" width={50} height={50} />
+          <img alt="toggle" src="/arrow-right.svg" width={50} height={50} />
         </div>
       )}
       <div className={styles["images-container__body"]}>

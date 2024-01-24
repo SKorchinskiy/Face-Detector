@@ -72,12 +72,15 @@ export default function Compare() {
     async (file: File) => {
       const base64 = await convertFileToBuffer(file);
       const id = await getDetectedImageId({ base64 });
-      const detection: ImageMetaData = await fetchData({
-        url: `http://localhost:8000/images/${id}`,
-      });
-      isFirstImage
-        ? setFirstImage({ detection })
-        : setSecondImage({ detection });
+      if (typeof id !== "undefined") {
+        const detection: ImageMetaData = await fetchData({
+          url: `https://skorchinskiy.pro:8000/images/${id}`,
+        });
+        if (detection)
+          isFirstImage
+            ? setFirstImage({ detection })
+            : setSecondImage({ detection });
+      }
     };
 
   useEffect(() => {
@@ -91,7 +94,7 @@ export default function Compare() {
         firstImage.detection,
         secondImage.detection
       );
-      setComparison(similarityRate);
+      if (similarityRate) setComparison(similarityRate);
     }
   };
 

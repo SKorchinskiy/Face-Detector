@@ -32,8 +32,8 @@ export default function FaceBoxList({
             imageShortenerValue;
           return (
             <FaceBox
-              key={index}
-              id={index}
+              key={imageMetaData.id}
+              id={imageMetaData.id}
               width={width}
               height={height}
               marginLeft={marginLeft}
